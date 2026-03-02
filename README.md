@@ -1,6 +1,11 @@
-# ARC Raiders – Scrappy Workshop Crafting Checklist
+# ARC Raiders – Companion Trackers
 
-A fan-made interactive crafting checklist for **ARC Raiders**, covering all Scrappy/Workshop upgrades, Quests, and Expedition parts.
+A fan-made set of interactive trackers for **ARC Raiders**, covering crafting upgrades and achievements.
+
+## Trackers
+
+- **Crafting tracker** — `crafting.html`
+- **Achievement tracker** — `achievements.html`
 
 ## Features
 
@@ -9,16 +14,17 @@ A fan-made interactive crafting checklist for **ARC Raiders**, covering all Scra
 - **Need X More badge** — instantly see how many of each item you still need
 - **Filter by status** — view All / Incomplete / Complete upgrades
 - **Search** — find any item or upgrade by name
-- **Progress bar** — overall checklist completion tracker
+- **Progress bar** — overall tracker completion status
 - **Saves automatically** — progress is stored in your browser's localStorage
+- **Achievement tracker** — mark completed achievements and see remaining progress
 
 ## Hosting on GitHub Pages
 
-1. Create a new repo on GitHub (e.g. `arc-raiders-checklist`)
+1. Create a new repo on GitHub (e.g. `arc-raiders-trackers`)
 2. Upload `index.html` to the root of the repo
 3. Go to **Settings → Pages**
 4. Under **Source**, select `Deploy from a branch` → `main` → `/ (root)`
-5. Hit **Save** — your site will be live at `https://yourusername.github.io/arc-raiders-checklist/`
+5. Hit **Save** — your site will be live at `https://yourusername.github.io/arc-raiders-trackers/`
 
 ## Local Use
 
