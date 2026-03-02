@@ -224,7 +224,8 @@
     overflow: hidden;
     cursor: pointer;
     text-decoration: none;
-    display: block;
+    display: flex;
+    flex-direction: column;
     opacity: 0;
     transform: translateY(20px);
     transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
@@ -271,7 +272,7 @@
 
   .card:hover::before { transform: translateX(100%); }
 
-  .card-inner { padding: 24px 24px 28px; }
+  .card-inner { padding: 24px 24px 28px; display: flex; flex-direction: column; flex: 1; }
 
   .card-icon {
     font-size: 2rem;
@@ -316,6 +317,7 @@
     color: var(--dim);
     line-height: 1.6;
     margin-bottom: 20px;
+    flex: 1;
   }
 
   .card-footer {
@@ -436,12 +438,12 @@
       <div class="card-inner">
         <span class="card-icon">⚙</span>
         <div class="card-tag">Workshop</div>
-        <div class="card-title">Crafting Checklist</div>
+        <div class="card-title">Crafting Tracker</div>
         <div class="card-desc">
           Track every item needed for Scrappy upgrades, Gunsmith, Gear Bench, Medical Lab, Refiner, and more. Set your inventory count and auto-complete items as you gather them.
         </div>
         <div class="card-footer">
-          <span class="card-cta">Open Checklist</span>
+          <span class="card-cta">Open Tracker</span>
           <span class="card-arrow">›</span>
         </div>
       </div>
@@ -452,12 +454,12 @@
       <div class="card-inner">
         <span class="card-icon">◈</span>
         <div class="card-tag">Progress</div>
-        <div class="card-title">Achievements Checklist</div>
+        <div class="card-title">Achievement Tracker</div>
         <div class="card-desc">
           Track every achievement and unlock condition. Filter by category, mark completed milestones, and see what you still need to hunt down across all game modes.
         </div>
         <div class="card-footer">
-          <span class="card-cta">Open Checklist</span>
+          <span class="card-cta">Open Tracker</span>
           <span class="card-arrow">›</span>
         </div>
       </div>

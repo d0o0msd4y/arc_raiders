@@ -7,15 +7,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0c10;
-    --surface: #111520;
-    --surface2: #161b28;
-    --border: #1e2840;
-    --accent: #00d4ff;
+    --bg:      #0b0c10;
+    --surface: #0e1018;
+    --surface2: #12151e;
+    --border:  #1d2235;
+    --border2: #2a3350;
+    --accent:  #00cfff;
     --accent2: #ff6b35;
-    --accent3: #7fff5f;
-    --text: #c8d4e8;
-    --text-dim: #5a6a8a;
+    --accent3: #5eff3a;
+    --text:    #b0c4de;
+    --text-dim: #556070;
     --done: #1a2a1a;
     --done-text: #3a5a3a;
   }
@@ -27,6 +28,8 @@
     color: var(--text);
     font-family: 'Share Tech Mono', monospace;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     overflow-x: hidden;
   }
 
@@ -35,61 +38,61 @@
     content: '';
     position: fixed;
     inset: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,212,255,0.03) 40px),
-                repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,212,255,0.03) 40px);
+    background:
+      repeating-linear-gradient(0deg,  transparent, transparent 39px, rgba(0,207,255,0.022) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,207,255,0.022) 40px);
     pointer-events: none;
     z-index: 0;
   }
 
   .container { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 20px; }
 
-  header {
-    text-align: center;
-    padding: 30px 0 20px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 24px;
+  /* ── Chrome bar at top ── */
+  .topbar {
     position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    height: 44px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
   }
 
-  .home-link {
-    position: absolute;
-    top: 6px;
-    left: 0;
-    display: inline-flex;
+  .topbar-back {
+    display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    color: var(--accent);
+    gap: 7px;
+    padding: 0 18px;
+    height: 100%;
+    border-right: 1px solid var(--border);
+    color: var(--text-dim);
     text-decoration: none;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.15s, background 0.15s;
+  }
+  .topbar-back:hover { color: var(--accent); background: rgba(0,207,255,0.05); }
+
+  .topbar-crumb {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding-left: 18px;
+  }
+
+  .crumb {
+    font-family: 'Orbitron', monospace;
     font-size: 0.7rem;
+    font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    background: rgba(0,212,255,0.06);
-    transition: all 0.2s ease;
-  }
-
-  .home-link:hover {
-    border-color: var(--accent);
-    box-shadow: 0 0 10px rgba(0,212,255,0.25);
-  }
-
-  header h1 {
-    font-family: 'Orbitron', monospace;
-    font-size: clamp(1.4rem, 4vw, 2.4rem);
-    font-weight: 900;
-    color: var(--accent);
-    text-shadow: 0 0 20px rgba(0,212,255,0.5);
-    letter-spacing: 0.05em;
-  }
-
-  header p {
     color: var(--text-dim);
-    font-size: 0.8rem;
-    margin-top: 6px;
-    letter-spacing: 0.1em;
   }
+
+  .crumb-sep { margin: 0 8px; color: var(--border2); font-size: 0.8rem; }
+  .crumb.active { color: var(--text); }
 
   /* Controls bar */
   .controls {
@@ -530,18 +533,21 @@
 </style>
 </head>
 <body>
+<div class="topbar">
+  <a class="topbar-back" href="index.html">◂ &nbsp;Hub</a>
+  <div class="topbar-crumb">
+    <span class="crumb">ARC Raiders</span>
+    <span class="crumb-sep">/</span>
+    <span class="crumb active">Quests</span>
+  </div>
+</div>
 <div class="container">
-  <header>
-    <a class="home-link" href="index.html">← Home</a>
-    <h1>◈ ARC RAIDERS</h1>
-    <p>QUEST TRACKER &nbsp;|&nbsp; STORY TASKS</p>
-  </header>
 
   <div class="controls">
     <button class="filter-btn active" data-filter="all">ALL</button>
     <button class="filter-btn" data-filter="incomplete">INCOMPLETE</button>
     <button class="filter-btn" data-filter="complete">COMPLETE</button>
-    <input class="search-box" type="text" placeholder="Search items or upgrades…" id="searchBox">
+    <input class="search-box" type="text" placeholder="Search quests or objectives…" id="searchBox">
     <button class="reset-btn" id="resetBtn">⟳ RESET</button>
   </div>
 
@@ -573,23 +579,117 @@
 <script>
 const DATA = [
   {
-    section: "QUESTS",
+    section: "DAM BATTLEGROUNDS",
     upgrades: [
-      { name: "Clearer Skies", items: [{ name: "ARC Alloy", needed: 3 }] },
-      { name: "Trash Into Treasure", items: [{ name: "Wires", needed: 6 }, { name: "Battery", needed: 1 }] },
-      { name: "The Trifecta", items: [{ name: "Snitch Scanner", needed: 2 }, { name: "Wasp Driver", needed: 2 }, { name: "Hornet Driver", needed: 2 }] },
-      { name: "Mixed Signals", items: [{ name: "Surveyor Vault", needed: 1 }] },
-      { name: "Unexpected Initiative", items: [{ name: "Water Pump", needed: 1 }] },
-      { name: "Out of the Shadows", items: [{ name: "Rocketeer Driver", needed: 1 }] },
-      { name: "Doctor's Orders", items: [{ name: "Antiseptic", needed: 2 }, { name: "Syringe", needed: 1 }, { name: "Durable Cloth", needed: 1 }, { name: "Great Mullenin", needed: 1 }] },
-      { name: "A Reveal in Ruins", items: [{ name: "ESR Analyzer", needed: 1 }] }
+      { name: "Picking Up The Pieces",    items: [{ name: "Loot containers", needed: 3 }] },
+      { name: "Clearer Skies",            items: [{ name: "ARC Alloy", needed: 3 }] },
+      { name: "Trash Into Treasure",      items: [{ name: "Wires", needed: 6 }, { name: "Battery", needed: 1 }] },
+      { name: "Off The Radar",            items: [{ name: "Repair antenna at Field Depot", needed: 1 }] },
+      { name: "A Bad Feeling",            items: [{ name: "Find ARC Probe / Courier", needed: 1 }] },
+      { name: "The Right Tool",           items: [{ name: "Destroy Fireball", needed: 1 }, { name: "Destroy Hornet", needed: 1 }, { name: "Destroy Turret", needed: 1 }] },
+      { name: "Hatch Repairs",            items: [{ name: "Repair hydraulic pipes", needed: 1 }, { name: "Find hatch key", needed: 1 }] },
+      { name: "Safe Passage",             items: [{ name: "Destroy enemies with explosive grenades", needed: 2 }] },
+      { name: "Down To Earth",            items: [{ name: "Visit Field Depot", needed: 1 }, { name: "Deliver crate", needed: 1 }] },
+      { name: "The Trifecta",             items: [{ name: "Snitch Scanner", needed: 2 }, { name: "Wasp Driver", needed: 2 }, { name: "Hornet Driver", needed: 2 }] },
+      { name: "A Better Use",             items: [{ name: "Request / loot Supply Drop", needed: 1 }] },
+      { name: "What Goes Around",         items: [{ name: "Destroy ARC enemy with Fireball Burner", needed: 1 }] },
+      { name: "Sparks Fly",              items: [{ name: "Destroy Hornet with grenades", needed: 1 }] },
+      { name: "Greasing Her Palms",       items: [{ name: "Visit locked room (any map)", needed: 3 }] },
+      { name: "A First Foothold",         items: [{ name: "Stabilise / enable structures", needed: 3 }] },
+      { name: "Dormant Barons",           items: [{ name: "Loot Baron husk", needed: 1 }] },
+      { name: "Mixed Signals",            items: [{ name: "Surveyor Vault", needed: 1 }] },
+      { name: "What We Left Behind",      items: [{ name: "Search containers across locations", needed: 1 }] },
+      { name: "Broken Monument",          items: [{ name: "Reach Scrap Yard", needed: 1 }, { name: "Find compass, tape & rations", needed: 1 }] },
+      { name: "Straight Record",          items: [{ name: "Reach Victory Ridge", needed: 1 }, { name: "Disable EMP trap", needed: 1 }] },
+      { name: "Keeping the Memory",       items: [{ name: "Reach Formical Hills wreckage", needed: 1 }] },
+      { name: "A Symbol of Unification",  items: [{ name: "Hoist flag at Formicai Outpost", needed: 1 }] },
+      { name: "Celeste's Journals",       items: [{ name: "Retrieve journal", needed: 2 }] },
+      { name: "Back on Top",              items: [{ name: "Mark locations across maps", needed: 4 }] },
+      { name: "The Major's Footlocker",   items: [{ name: "Search apartments", needed: 1 }, { name: "Deliver mementos", needed: 1 }] },
+      { name: "Out of the Shadows",       items: [{ name: "Rocketeer Driver", needed: 1 }] },
+      { name: "Water Troubles",           items: [{ name: "Locate flood tunnel", needed: 1 }, { name: "Sample water supply", needed: 1 }] },
+      { name: "Into the Fray",            items: [{ name: "Destroy Leaper", needed: 1 }] },
+      { name: "Source of Contamination",  items: [{ name: "Investigate Water Treatment Building", needed: 1 }] },
+      { name: "A Balanced Harvest",       items: [{ name: "Find Lab 1 in Research Building", needed: 1 }] },
+      { name: "Untended Garden",          items: [{ name: "Access data archive", needed: 1 }, { name: "Upload to depot", needed: 1 }] },
+      { name: "Eyes in the Sky",          items: [{ name: "Install LiDAR scanner", needed: 3 }] },
     ]
-  }
+  },
+  {
+    section: "SPACEPORT",
+    upgrades: [
+      { name: "Jiangsu Warehouse",        items: [{ name: "Retrieve LiDAR scanners", needed: 1 }] },
+      { name: "Switching the Supply",     items: [{ name: "Find & turn valve in tunnels", needed: 1 }] },
+      { name: "Eyes on the Prize",        items: [{ name: "Rewire solar panels with Wires", needed: 1 }] },
+      { name: "Industrial Espionage",     items: [{ name: "Locate weapon cache", needed: 1 }] },
+      { name: "Turnabout",                items: [{ name: "Upload blackmail files", needed: 1 }] },
+      { name: "Prescriptions of the Past",items: [{ name: "Search medical records", needed: 1 }] },
+      { name: "Power Out",                items: [{ name: "Restore substation power", needed: 1 }] },
+      { name: "Lost in Transmission",     items: [{ name: "Visit & climb Control Tower A6", needed: 1 }] },
+      { name: "A Lay of the Land",        items: [{ name: "Retrieve scanners", needed: 1 }, { name: "Deliver scanners", needed: 1 }] },
+    ]
+  },
+  {
+    section: "BURIED CITY",
+    upgrades: [
+      { name: "Doctor's Orders",          items: [{ name: "Antiseptic", needed: 2 }, { name: "Syringe", needed: 1 }, { name: "Durable Cloth", needed: 1 }, { name: "Great Mullenin", needed: 1 }] },
+      { name: "Medical Merchandise",      items: [{ name: "Search hospital containers", needed: 1 }, { name: "Search pharmacy containers", needed: 1 }] },
+      { name: "A Reveal in Ruins",        items: [{ name: "ESR Analyzer", needed: 1 }] },
+      { name: "Marked for Death",         items: [{ name: "Reach Su Durante Warehouses", needed: 1 }] },
+      { name: "Market Correction",        items: [{ name: "Locate cache at Marano Station", needed: 1 }] },
+      { name: "Unexpected Initiative",    items: [{ name: "Water Pump", needed: 1 }] },
+      { name: "The Root of the Matter",   items: [{ name: "Retrieve seed sample", needed: 1 }] },
+      { name: "Communication Hideout",    items: [{ name: "Boot antenna terminal in Old Town", needed: 1 }] },
+      { name: "After Rain Comes",         items: [{ name: "Repair solar panels", needed: 1 }] },
+      { name: "Building a Library",       items: [{ name: "Deliver books", needed: 3 }] },
+      { name: "A New Type of Plant",      items: [{ name: "Deliver toxic plant", needed: 1 }] },
+      { name: "Eyes on the Prize",        items: [{ name: "Rewire solar panel in Old Town", needed: 1 }] },
+    ]
+  },
+  {
+    section: "BLUE GATE",
+    upgrades: [
+      { name: "Reduced to Rubble",        items: [{ name: "Photograph highway", needed: 1 }, { name: "Investigate destruction", needed: 1 }] },
+      { name: "With a Trace",             items: [{ name: "Find destruction signs", needed: 1 }] },
+      { name: "Bees!",                    items: [{ name: "Search Olive Grove for hives", needed: 1 }] },
+      { name: "A Prime Specimen",         items: [{ name: "Obtain ARC Powercells", needed: 1 }] },
+      { name: "A Dead End",               items: [{ name: "Find MANTIKOR facilities", needed: 1 }, { name: "Retrieve film reel", needed: 1 }] },
+    ]
+  },
+  {
+    section: "STELLA MONTIS",
+    upgrades: [
+      { name: "Snap and Salvage",         items: [{ name: "Photograph rovers", needed: 1 }, { name: "Deliver components", needed: 1 }] },
+      { name: "In My Image",              items: [{ name: "Find androids", needed: 3 }] },
+      { name: "Cold Storage",             items: [{ name: "Search J Kozma containers", needed: 1 }] },
+      { name: "With a View",              items: [{ name: "Activate server switch", needed: 1 }] },
+    ]
+  },
+  {
+    section: "HEADWINDS",
+    upgrades: [
+      { name: "A Toxic Trail",            items: [{ name: "Photograph barrel truck", needed: 1 }] },
+      { name: "The Stench of Corruption", items: [{ name: "Override bypass protocol", needed: 1 }] },
+      { name: "The Clean Dream",          items: [{ name: "Monitor filtration systems", needed: 1 }] },
+      { name: "Paving the Way",           items: [{ name: "Retrieve research data", needed: 1 }] },
+      { name: "Deciphering the Data",     items: [{ name: "Use magnetic decryptor", needed: 1 }] },
+      { name: "Groundbreaking",           items: [{ name: "Investigate housing project", needed: 1 }] },
+      { name: "Worth Your Salt",          items: [{ name: "Charge battery prototype", needed: 1 }] },
+      { name: "Stable Housing",           items: [{ name: "Access safe contents", needed: 1 }] },
+      { name: "Keeping An Eye Out",       items: [{ name: "Find shelter clues", needed: 1 }] },
+      { name: "A Rising Tide",            items: [{ name: "Access reconstruction project", needed: 1 }] },
+      { name: "The League",               items: [{ name: "Collect sports items", needed: 1 }, { name: "Photograph goals", needed: 1 }] },
+      { name: "Combat Recon",             items: [{ name: "Destroy spotters", needed: 1 }, { name: "Deliver relay", needed: 1 }] },
+      { name: "On Deaf Ears",             items: [{ name: "Find research information", needed: 1 }] },
+      { name: "Bombing Run",              items: [{ name: "Destroy Bombardier", needed: 1 }] },
+      { name: "Movie Night",              items: [{ name: "Deliver TV", needed: 1 }, { name: "Collect movie tapes", needed: 1 }] },
+    ]
+  },
 ];
 
 // State: { "section:upgrade:itemName": { checked: bool, inv: number } }
 let state = {};
-const STORAGE_KEY = 'arc_raiders_quests_v1';
+const STORAGE_KEY = 'arc_raiders_quests_v2';
 
 function loadState() {
   try {

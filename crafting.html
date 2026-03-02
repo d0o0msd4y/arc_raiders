@@ -7,15 +7,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0c10;
-    --surface: #111520;
-    --surface2: #161b28;
-    --border: #1e2840;
-    --accent: #00d4ff;
+    --bg:      #0b0c10;
+    --surface: #0e1018;
+    --surface2: #12151e;
+    --border:  #1d2235;
+    --border2: #2a3350;
+    --accent:  #00cfff;
     --accent2: #ff6b35;
-    --accent3: #7fff5f;
-    --text: #c8d4e8;
-    --text-dim: #5a6a8a;
+    --accent3: #5eff3a;
+    --text:    #b0c4de;
+    --text-dim: #556070;
     --done: #1a2a1a;
     --done-text: #3a5a3a;
   }
@@ -27,6 +28,8 @@
     color: var(--text);
     font-family: 'Share Tech Mono', monospace;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     overflow-x: hidden;
   }
 
@@ -35,61 +38,61 @@
     content: '';
     position: fixed;
     inset: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,212,255,0.03) 40px),
-                repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,212,255,0.03) 40px);
+    background:
+      repeating-linear-gradient(0deg,  transparent, transparent 39px, rgba(0,207,255,0.022) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,207,255,0.022) 40px);
     pointer-events: none;
     z-index: 0;
   }
 
   .container { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 20px; }
 
-  header {
-    text-align: center;
-    padding: 30px 0 20px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 24px;
+  /* ── Chrome bar at top ── */
+  .topbar {
     position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    height: 44px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
   }
 
-  .home-link {
-    position: absolute;
-    top: 6px;
-    left: 0;
-    display: inline-flex;
+  .topbar-back {
+    display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    color: var(--accent);
+    gap: 7px;
+    padding: 0 18px;
+    height: 100%;
+    border-right: 1px solid var(--border);
+    color: var(--text-dim);
     text-decoration: none;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.15s, background 0.15s;
+  }
+  .topbar-back:hover { color: var(--accent); background: rgba(0,207,255,0.05); }
+
+  .topbar-crumb {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding-left: 18px;
+  }
+
+  .crumb {
+    font-family: 'Orbitron', monospace;
     font-size: 0.7rem;
+    font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    background: rgba(0,212,255,0.06);
-    transition: all 0.2s ease;
-  }
-
-  .home-link:hover {
-    border-color: var(--accent);
-    box-shadow: 0 0 10px rgba(0,212,255,0.25);
-  }
-
-  header h1 {
-    font-family: 'Orbitron', monospace;
-    font-size: clamp(1.4rem, 4vw, 2.4rem);
-    font-weight: 900;
-    color: var(--accent);
-    text-shadow: 0 0 20px rgba(0,212,255,0.5);
-    letter-spacing: 0.05em;
-  }
-
-  header p {
     color: var(--text-dim);
-    font-size: 0.8rem;
-    margin-top: 6px;
-    letter-spacing: 0.1em;
   }
+
+  .crumb-sep { margin: 0 8px; color: var(--border2); font-size: 0.8rem; }
+  .crumb.active { color: var(--text); }
 
   /* Controls bar */
   .controls {
@@ -532,12 +535,15 @@
 </style>
 </head>
 <body>
+<div class="topbar">
+  <a class="topbar-back" href="index.html">◂ &nbsp;Hub</a>
+  <div class="topbar-crumb">
+    <span class="crumb">ARC Raiders</span>
+    <span class="crumb-sep">/</span>
+    <span class="crumb active">Crafting</span>
+  </div>
+</div>
 <div class="container">
-  <header>
-    <a class="home-link" href="index.html">← Home</a>
-    <h1>◈ ARC RAIDERS</h1>
-    <p>SCRAPPY / WORKSHOP UPGRADE TRACKER &nbsp;|&nbsp; CRAFTING TRACKER</p>
-  </header>
 
   <div class="controls">
     <button class="filter-btn active" data-filter="all">ALL</button>

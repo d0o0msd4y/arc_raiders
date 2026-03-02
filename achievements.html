@@ -7,14 +7,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #080b10;
-    --surface: #0d1420;
-    --border: #1a2a3a;
-    --accent: #00c8ff;
-    --accent2: #ff5e00;
-    --text: #c8d8e8;
-    --dim: #5a7080;
-    --complete: #00ff88;
+    --bg:      #0b0c10;
+    --surface: #0e1018;
+    --border:  #1d2235;
+    --border2: #2a3350;
+    --accent:  #00cfff;
+    --accent2: #ff6b35;
+    --text:    #b0c4de;
+    --dim:     #556070;
+    --complete: #5eff3a;
+    --white:   #ddeeff;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,16 +26,18 @@
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    padding: 24px 16px 48px;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
   }
 
   body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background: 
-      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,200,255,0.03) 40px),
-      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,200,255,0.03) 40px);
+    background:
+      repeating-linear-gradient(0deg,  transparent, transparent 39px, rgba(0,207,255,0.022) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,207,255,0.022) 40px);
     pointer-events: none;
     z-index: 0;
   }
@@ -43,70 +47,55 @@
     margin: 0 auto;
     position: relative;
     z-index: 1;
+    padding: 24px 16px 48px;
   }
 
-  header {
-    text-align: center;
-    margin-bottom: 36px;
-    padding: 32px 16px;
-    border: 1px solid var(--border);
-    background: linear-gradient(180deg, rgba(0,200,255,0.05) 0%, transparent 100%);
+  /* ── Chrome bar at top ── */
+  .topbar {
     position: relative;
-    overflow: hidden;
-  }
-
-  header::before, header::after {
-    content: '';
-    position: absolute;
-    top: 0; bottom: 0;
-    width: 2px;
-    background: linear-gradient(180deg, var(--accent), transparent);
-  }
-  header::before { left: 0; }
-  header::after { right: 0; }
-
-  .home-link {
-    position: absolute;
-    top: 14px;
-    left: 14px;
-    display: inline-flex;
+    z-index: 10;
+    display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    color: var(--accent);
+    height: 44px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .topbar-back {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 18px;
+    height: 100%;
+    border-right: 1px solid var(--border);
+    color: var(--dim);
     text-decoration: none;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.15s, background 0.15s;
+  }
+  .topbar-back:hover { color: var(--accent); background: rgba(0,207,255,0.05); }
+
+  .topbar-crumb {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding-left: 18px;
+  }
+
+  .crumb {
+    font-family: 'Orbitron', monospace;
     font-size: 0.7rem;
+    font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    background: rgba(0,200,255,0.06);
-    transition: all 0.2s ease;
-  }
-
-  .home-link:hover {
-    border-color: var(--accent);
-    box-shadow: 0 0 10px rgba(0,200,255,0.25);
-  }
-
-  h1 {
-    font-family: 'Orbitron', monospace;
-    font-size: clamp(1.4rem, 4vw, 2.4rem);
-    font-weight: 900;
-    letter-spacing: 0.08em;
-    color: #fff;
-    text-shadow: 0 0 30px rgba(0,200,255,0.6), 0 0 60px rgba(0,200,255,0.2);
-  }
-
-  h1 span { color: var(--accent); }
-
-  .subtitle {
-    margin-top: 8px;
-    font-size: 0.75rem;
     color: var(--dim);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
   }
+
+  .crumb-sep { margin: 0 8px; color: var(--border2); font-size: 0.8rem; }
+  .crumb.active { color: var(--text); }
 
   /* Progress bar */
   .progress-section {
@@ -424,12 +413,15 @@
 </style>
 </head>
 <body>
+<div class="topbar">
+  <a class="topbar-back" href="index.html">◂ &nbsp;Hub</a>
+  <div class="topbar-crumb">
+    <span class="crumb">ARC Raiders</span>
+    <span class="crumb-sep">/</span>
+    <span class="crumb active">Achievements</span>
+  </div>
+</div>
 <div class="container">
-  <header>
-    <a class="home-link" href="index.html">← Home</a>
-    <h1>ARC <span>RAIDERS</span></h1>
-    <div class="subtitle">Achievement Checklist &bull; 50 Total &bull; 1,000 Gamerscore</div>
-  </header>
 
   <div class="progress-section">
     <div class="progress-label">
