@@ -260,7 +260,7 @@
   /* ── Blueprint grid ── */
   .bp-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    grid-template-columns: repeat(10, 1fr);
     gap: 6px;
   }
 
@@ -637,7 +637,7 @@
   @media (max-width: 640px) {
     .sidebar  { display: none; }
     .detail   { width: 100%; }
-    .bp-grid  { grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); }
+    .bp-grid  { grid-template-columns: repeat(5, 1fr); }
   }
 </style>
 </head>
@@ -838,80 +838,80 @@ const IMG = {
 
 // ── Blueprint data (merged from your existing page + new entries) ──
 const BLUEPRINTS = [
-  { name:'Anvil',                       type:'Weapon',    recipe:['5x Mechanical Components','5x Simple Gun Parts'],                                 craftedAt:'Gunsmith 2' },
-  { name:'Angled Grip II',              type:'Mod',       recipe:['2x Mechanical Components','3x Duct Tape'],                                        craftedAt:'Gunsmith 2' },
-  { name:'Angled Grip III',             type:'Mod',       recipe:['2x Mod Components','5x Duct Tape'],                                               craftedAt:'Gunsmith 3' },
-  { name:'Aphelion',                    type:'Weapon',    recipe:['3x Magnetic Accelerator','3x Complex Gun Parts','1x Matriarch Reactor'],           craftedAt:'Gunsmith 3' },
-  { name:'Barricade Kit',              type:'Quick Use', recipe:['1x Mechanical Components'],                                                         craftedAt:'Utility Station 2' },
-  { name:'Bettina',                     type:'Weapon',    recipe:['3x Advanced Mechanical Components','3x Heavy Gun Parts','3x Canister'],            craftedAt:'Gunsmith 3' },
+  { name:'Angled Grip II',             type:'Mod',       recipe:['2x Mechanical Components','3x Duct Tape'],                                          craftedAt:'Gunsmith 2' },
+  { name:'Angled Grip III',            type:'Mod',       recipe:['2x Mod Components','5x Duct Tape'],                                                 craftedAt:'Gunsmith 3' },
+  { name:'Anvil',                      type:'Weapon',    recipe:['5x Mechanical Components','5x Simple Gun Parts'],                                   craftedAt:'Gunsmith 2' },
+  { name:'Aphelion',                   type:'Weapon',    recipe:['3x Magnetic Accelerator','3x Complex Gun Parts','1x Matriarch Reactor'],            craftedAt:'Gunsmith 3' },
+  { name:'Barricade Kit',              type:'Quick Use', recipe:['1x Mechanical Components'],                                                          craftedAt:'Utility Station 2' },
+  { name:'Bettina',                    type:'Weapon',    recipe:['3x Advanced Mechanical Components','3x Heavy Gun Parts','3x Canister'],             craftedAt:'Gunsmith 3' },
   { name:'Blaze Grenade',              type:'Grenade',   recipe:['1x Explosive Compound','2x Oil'],                                                   craftedAt:'Explosives Station 3' },
   { name:'Blue Light Stick',           type:'Quick Use', recipe:['3x Chemicals'],                                                                      craftedAt:'Utility Station 1' },
-  { name:'Bobcat',                      type:'Weapon',    recipe:['3x Advanced Mechanical Components','3x Light Gun Parts'],                           craftedAt:'Gunsmith 3' },
-  { name:'Burletta',                    type:'Weapon',    recipe:['3x Mechanical Components','3x Simple Gun Parts'],                                   craftedAt:'Gunsmith 1' },
-  { name:'Combat Mk. 3 (Aggressive)',  type:'Augment',   recipe:['2x Advanced Electrical Components','3x Processor'],                                 craftedAt:'Gear Bench 3' },
-  { name:'Combat Mk. 3 (Flanking)',    type:'Augment',   recipe:['2x Advanced Electrical Components','3x Processor'],                                 craftedAt:'Gear Bench 3' },
-  { name:'Compensator II',             type:'Mod',       recipe:['2x Mechanical Components','4x Wires'],                                              craftedAt:'Gunsmith 2' },
-  { name:'Compensator III',            type:'Mod',       recipe:['2x Mod Components','8x Wires'],                                                     craftedAt:'Gunsmith 3' },
-  { name:'Complex Gun Parts',          type:'Material',  recipe:['2x Light Gun Parts','2x Medium Gun Parts','2x Heavy Gun Parts'],                    craftedAt:'Refiner 3' },
-  { name:'Deadline',                   type:'Mine',      recipe:['3x Explosive Compound','2x ARC Circuitry'],                                         craftedAt:'Explosives Station 3' },
-  { name:'Defibrillator',              type:'Quick Use', recipe:['9x Plastic Parts','1x Moss'],                                                        craftedAt:'Medical Lab 2' },
-  { name:'Equalizer',                  type:'Weapon',    recipe:['3x Magnetic Accelerator','3x Complex Gun Parts','1x Queen Reactor'],                craftedAt:'Gunsmith 3' },
-  { name:'Explosive Mine',             type:'Mine',      recipe:['1x Explosive Compound','1x Sensors'],                                               craftedAt:'Explosives Station 3' },
-  { name:'Extended Barrel',            type:'Mod',       recipe:['2x Mod Components','8x Wires'],                                                     craftedAt:'Gunsmith 3' },
-  { name:'Extended Light Mag II',      type:'Mod',       recipe:['2x Mechanical Components','3x Steel Spring'],                                       craftedAt:'Gunsmith 2' },
-  { name:'Extended Light Mag III',     type:'Mod',       recipe:['2x Mod Components','5x Steel Spring'],                                              craftedAt:'Gunsmith 3' },
-  { name:'Extended Medium Mag II',     type:'Mod',       recipe:['2x Mechanical Components','3x Steel Spring'],                                       craftedAt:'Gunsmith 2' },
-  { name:'Extended Medium Mag III',    type:'Mod',       recipe:['2x Mod Components','5x Steel Spring'],                                              craftedAt:'Gunsmith 3' },
-  { name:'Extended Shotgun Mag II',    type:'Mod',       recipe:['2x Mechanical Components','3x Steel Spring'],                                       craftedAt:'Gunsmith 2' },
-  { name:'Extended Shotgun Mag III',   type:'Mod',       recipe:['2x Mod Components','5x Steel Spring'],                                              craftedAt:'Gunsmith 3' },
-  { name:'Fireworks Box',              type:'Quick Use', recipe:['1x Explosive Compound','3x Pop Trigger'],                                            craftedAt:'Explosives Station 2' },
-  { name:'Gas Mine',                   type:'Mine',      recipe:['4x Chemicals','2x Rubber Parts'],                                                   craftedAt:'Explosives Station 1' },
-  { name:'Green Light Stick',          type:'Quick Use', recipe:['3x Chemicals'],                                                                      craftedAt:'Utility Station 1' },
-  { name:'Heavy Gun Parts',            type:'Material',  recipe:['4x Simple Gun Parts'],                                                              craftedAt:'Refiner 2' },
-  { name:'Hullcracker',               type:'Weapon',    recipe:['1x Magnetic Accelerator','3x Heavy Gun Parts','1x Exodus Modules'],                 craftedAt:'Gunsmith 3' },
-  { name:'Il Toro',                    type:'Weapon',    recipe:['5x Mechanical Components','6x Simple Gun Parts'],                                   craftedAt:'Gunsmith 1' },
-  { name:'Jolt Mine',                  type:'Mine',      recipe:['1x Electrical Components','1x Battery'],                                            craftedAt:'Explosives Station 2' },
-  { name:'Jupiter',                    type:'Weapon',    recipe:['3x Magnetic Accelerator','3x Complex Gun Parts','1x Queen Reactor'],                craftedAt:'Gunsmith 3' },
-  { name:'Light Gun Parts',            type:'Material',  recipe:['4x Simple Gun Parts'],                                                              craftedAt:'Refiner 2' },
-  { name:'Lightweight Stock',          type:'Mod',       recipe:['2x Mod Components','5x Duct Tape'],                                                 craftedAt:'Gunsmith 3' },
-  { name:'Looting Mk. 3 (Safekeeper)',type:'Augment',   recipe:['2x Advanced Electrical Components','3x Processor'],                                  craftedAt:'Gear Bench 3' },
+  { name:'Bobcat',                     type:'Weapon',    recipe:['3x Advanced Mechanical Components','3x Light Gun Parts'],                            craftedAt:'Gunsmith 3' },
+  { name:'Burletta',                   type:'Weapon',    recipe:['3x Mechanical Components','3x Simple Gun Parts'],                                    craftedAt:'Gunsmith 1' },
+  { name:'Combat Mk. 3 (Aggressive)', type:'Augment',   recipe:['2x Advanced Electrical Components','3x Processor'],                                  craftedAt:'Gear Bench 3' },
+  { name:'Combat Mk. 3 (Flanking)',   type:'Augment',   recipe:['2x Advanced Electrical Components','3x Processor'],                                  craftedAt:'Gear Bench 3' },
+  { name:'Compensator II',            type:'Mod',       recipe:['2x Mechanical Components','4x Wires'],                                               craftedAt:'Gunsmith 2' },
+  { name:'Compensator III',           type:'Mod',       recipe:['2x Mod Components','8x Wires'],                                                      craftedAt:'Gunsmith 3' },
+  { name:'Complex Gun Parts',         type:'Material',  recipe:['2x Light Gun Parts','2x Medium Gun Parts','2x Heavy Gun Parts'],                     craftedAt:'Refiner 3' },
+  { name:'Deadline',                  type:'Mine',      recipe:['3x Explosive Compound','2x ARC Circuitry'],                                          craftedAt:'Explosives Station 3' },
+  { name:'Defibrillator',             type:'Quick Use', recipe:['9x Plastic Parts','1x Moss'],                                                         craftedAt:'Medical Lab 2' },
+  { name:'Equalizer',                 type:'Weapon',    recipe:['3x Magnetic Accelerator','3x Complex Gun Parts','1x Queen Reactor'],                 craftedAt:'Gunsmith 3' },
+  { name:'Explosive Mine',            type:'Mine',      recipe:['1x Explosive Compound','1x Sensors'],                                                craftedAt:'Explosives Station 3' },
+  { name:'Extended Barrel',           type:'Mod',       recipe:['2x Mod Components','8x Wires'],                                                      craftedAt:'Gunsmith 3' },
+  { name:'Extended Light Mag II',     type:'Mod',       recipe:['2x Mechanical Components','3x Steel Spring'],                                        craftedAt:'Gunsmith 2' },
+  { name:'Extended Light Mag III',    type:'Mod',       recipe:['2x Mod Components','5x Steel Spring'],                                               craftedAt:'Gunsmith 3' },
+  { name:'Extended Medium Mag II',    type:'Mod',       recipe:['2x Mechanical Components','3x Steel Spring'],                                        craftedAt:'Gunsmith 2' },
+  { name:'Extended Medium Mag III',   type:'Mod',       recipe:['2x Mod Components','5x Steel Spring'],                                               craftedAt:'Gunsmith 3' },
+  { name:'Extended Shotgun Mag II',   type:'Mod',       recipe:['2x Mechanical Components','3x Steel Spring'],                                        craftedAt:'Gunsmith 2' },
+  { name:'Extended Shotgun Mag III',  type:'Mod',       recipe:['2x Mod Components','5x Steel Spring'],                                               craftedAt:'Gunsmith 3' },
+  { name:'Fireworks Box',             type:'Quick Use', recipe:['1x Explosive Compound','3x Pop Trigger'],                                             craftedAt:'Explosives Station 2' },
+  { name:'Gas Mine',                  type:'Mine',      recipe:['4x Chemicals','2x Rubber Parts'],                                                    craftedAt:'Explosives Station 1' },
+  { name:'Green Light Stick',         type:'Quick Use', recipe:['3x Chemicals'],                                                                       craftedAt:'Utility Station 1' },
+  { name:'Heavy Gun Parts',           type:'Material',  recipe:['4x Simple Gun Parts'],                                                               craftedAt:'Refiner 2' },
+  { name:'Hullcracker',               type:'Weapon',    recipe:['1x Magnetic Accelerator','3x Heavy Gun Parts','1x Exodus Modules'],                  craftedAt:'Gunsmith 3' },
+  { name:'Il Toro',                   type:'Weapon',    recipe:['5x Mechanical Components','6x Simple Gun Parts'],                                    craftedAt:'Gunsmith 1' },
+  { name:'Jolt Mine',                 type:'Mine',      recipe:['1x Electrical Components','1x Battery'],                                             craftedAt:'Explosives Station 2' },
+  { name:'Jupiter',                   type:'Weapon',    recipe:['3x Magnetic Accelerator','3x Complex Gun Parts','1x Queen Reactor'],                 craftedAt:'Gunsmith 3' },
+  { name:'Light Gun Parts',           type:'Material',  recipe:['4x Simple Gun Parts'],                                                               craftedAt:'Refiner 2' },
+  { name:'Lightweight Stock',         type:'Mod',       recipe:['2x Mod Components','5x Duct Tape'],                                                  craftedAt:'Gunsmith 3' },
+  { name:'Looting Mk. 3 (Safekeeper)',type:'Augment',  recipe:['2x Advanced Electrical Components','3x Processor'],                                   craftedAt:'Gear Bench 3' },
   { name:'Looting Mk. 3 (Survivor)',  type:'Augment',   recipe:['2x Advanced Electrical Components','3x Processor'],                                  craftedAt:'Gear Bench 3' },
   { name:'Lure Grenade',              type:'Grenade',   recipe:['1x Speaker Component','1x Electrical Components'],                                   craftedAt:'Utility Station 2' },
   { name:'Medium Gun Parts',          type:'Material',  recipe:['4x Simple Gun Parts'],                                                               craftedAt:'Refiner 2' },
   { name:'Muzzle Brake II',           type:'Mod',       recipe:['2x Mechanical Components','4x Wires'],                                               craftedAt:'Gunsmith 2' },
   { name:'Muzzle Brake III',          type:'Mod',       recipe:['2x Mod Components','8x Wires'],                                                      craftedAt:'Gunsmith 3' },
-  { name:'Osprey',                    type:'Weapon',    recipe:['2x Advanced Mechanical Components','3x Medium Gun Parts','7x Wires'],                craftedAt:'Gunsmith 3' },
-  { name:'Padded Stock',              type:'Mod',       recipe:['2x Mod Components','5x Duct Tape'],                                                  craftedAt:'Gunsmith 3' },
-  { name:'Pulse Mine',               type:'Mine',      recipe:['1x Crude Explosives','1x Wires'],                                                    craftedAt:'Explosives Station 1' },
+  { name:'Osprey',                    type:'Weapon',    recipe:['2x Advanced Mechanical Components','3x Medium Gun Parts','7x Wires'],                 craftedAt:'Gunsmith 3' },
+  { name:'Padded Stock',              type:'Mod',       recipe:['2x Mod Components','5x Duct Tape'],                                                   craftedAt:'Gunsmith 3' },
+  { name:'Pulse Mine',                type:'Mine',      recipe:['1x Crude Explosives','1x Wires'],                                                    craftedAt:'Explosives Station 1' },
   { name:'Red Light Stick',           type:'Quick Use', recipe:['3x Chemicals'],                                                                       craftedAt:'Utility Station 1' },
-  { name:'Remote Raider Flare',       type:'Quick Use', recipe:['2x Chemicals','4x Rubber Parts'],                                                     craftedAt:'Utility Station 1' },
+  { name:'Remote Raider Flare',       type:'Quick Use', recipe:['2x Chemicals','4x Rubber Parts'],                                                    craftedAt:'Utility Station 1' },
   { name:'Seeker Grenade',            type:'Grenade',   recipe:['1x Crude Explosives','2x ARC Alloy'],                                                craftedAt:'Explosives Station 1' },
   { name:'Shotgun Choke II',          type:'Mod',       recipe:['2x Mechanical Components','4x Wires'],                                               craftedAt:'Gunsmith 2' },
   { name:'Shotgun Choke III',         type:'Mod',       recipe:['2x Mod Components','8x Wires'],                                                      craftedAt:'Gunsmith 3' },
   { name:'Shotgun Silencer',          type:'Mod',       recipe:['2x Mod Components','8x Wires'],                                                      craftedAt:'Gunsmith 3' },
-  { name:'Showstopper',              type:'Grenade',   recipe:['1x Advanced Electrical Components','1x Voltage Converter'],                           craftedAt:'Explosives Station 3' },
-  { name:'Silencer I',               type:'Mod',       recipe:['2x Mechanical Components','4x Wires'],                                               craftedAt:'Gunsmith 2' },
-  { name:'Silencer II',              type:'Mod',       recipe:['2x Mod Components','8x Wires'],                                                      craftedAt:'Gunsmith 3' },
-  { name:'Smoke Grenade',            type:'Grenade',   recipe:['14x Chemicals','1x Canister'],                                                       craftedAt:'Utility Station 2' },
-  { name:'Snap Hook',               type:'Quick Use', recipe:['2x Power Rod','3x Rope','1x Exodus Modules'],                                         craftedAt:'Utility Station 3' },
-  { name:'Stable Stock II',          type:'Mod',       recipe:['2x Mechanical Components','3x Duct Tape'],                                            craftedAt:'Gunsmith 2' },
-  { name:'Stable Stock III',         type:'Mod',       recipe:['2x Mod Components','5x Duct Tape'],                                                   craftedAt:'Gunsmith 3' },
-  { name:'Tactical Mk. 3 (Defensive)',type:'Augment', recipe:['2x Advanced Electrical Components','3x Processor'],                                    craftedAt:'Gear Bench 3' },
-  { name:'Tactical Mk. 3 (Healing)', type:'Augment',  recipe:['2x Advanced Electrical Components','3x Processor'],                                   craftedAt:'Gear Bench 3' },
-  { name:'Tactical Mk. 3 (Revival)', type:'Augment',  recipe:['2x Advanced Electrical Components','3x Processor'],                                   craftedAt:'Gear Bench 3' },
-  { name:'Tagging Grenade',          type:'Grenade',  recipe:['1x Electrical Components','1x Sensors'],                                              craftedAt:'Utility Station 3' },
-  { name:'Tempest',                  type:'Weapon',   recipe:['3x Advanced Mechanical Components','3x Medium Gun Parts','3x Canister'],               craftedAt:'Gunsmith 3' },
-  { name:'Torrente',                 type:'Weapon',   recipe:['2x Advanced Mechanical Components','3x Medium Gun Parts','6x Steel Spring'],           craftedAt:'Gunsmith 3' },
-  { name:'Trailblazer',             type:'Grenade',  recipe:['1x Explosive Compound','1x Synthesized Fuel'],                                         craftedAt:'Explosives Station 3' },
-  { name:"Trigger 'Nade",           type:'Grenade',  recipe:['2x Crude Explosives','1x Processor'],                                                  craftedAt:'Explosives Station 2' },
-  { name:'Venator',                  type:'Weapon',   recipe:['2x Advanced Mechanical Components','3x Medium Gun Parts','5x Magnet'],                 craftedAt:'Gunsmith 3' },
-  { name:'Vertical Grip II',         type:'Mod',      recipe:['2x Mechanical Components','3x Duct Tape'],                                             craftedAt:'Gunsmith 2' },
-  { name:'Vertical Grip III',        type:'Mod',      recipe:['2x Mod Components','5x Duct Tape'],                                                    craftedAt:'Gunsmith 3' },
-  { name:'Vita Shot',                type:'Quick Use',recipe:['2x Antiseptic','1x Syringe'],                                                          craftedAt:'Medical Lab 3' },
-  { name:'Vita Spray',               type:'Quick Use',recipe:['3x Antiseptic','1x Canister'],                                                         craftedAt:'Medical Lab 3' },
-  { name:'Vulcano',                  type:'Weapon',   recipe:['1x Magnetic Accelerator','3x Heavy Gun Parts','1x Exodus Modules'],                    craftedAt:'Gunsmith 3' },
-  { name:'Wolfpack',                 type:'Grenade',  recipe:['2x Explosive Compound','2x Sensors'],                                                  craftedAt:'Explosives Station 3' },
-  { name:'Yellow Light Stick',       type:'Quick Use',recipe:['3x Chemicals'],                                                                        craftedAt:'Utility Station 1' },
+  { name:'Showstopper',               type:'Grenade',   recipe:['1x Advanced Electrical Components','1x Voltage Converter'],                           craftedAt:'Explosives Station 3' },
+  { name:'Silencer I',                type:'Mod',       recipe:['2x Mechanical Components','4x Wires'],                                               craftedAt:'Gunsmith 2' },
+  { name:'Silencer II',               type:'Mod',       recipe:['2x Mod Components','8x Wires'],                                                      craftedAt:'Gunsmith 3' },
+  { name:'Smoke Grenade',             type:'Grenade',   recipe:['14x Chemicals','1x Canister'],                                                       craftedAt:'Utility Station 2' },
+  { name:'Snap Hook',                 type:'Quick Use', recipe:['2x Power Rod','3x Rope','1x Exodus Modules'],                                        craftedAt:'Utility Station 3' },
+  { name:'Stable Stock II',           type:'Mod',       recipe:['2x Mechanical Components','3x Duct Tape'],                                           craftedAt:'Gunsmith 2' },
+  { name:'Stable Stock III',          type:'Mod',       recipe:['2x Mod Components','5x Duct Tape'],                                                  craftedAt:'Gunsmith 3' },
+  { name:'Tactical Mk. 3 (Defensive)',type:'Augment',  recipe:['2x Advanced Electrical Components','3x Processor'],                                   craftedAt:'Gear Bench 3' },
+  { name:'Tactical Mk. 3 (Healing)', type:'Augment',   recipe:['2x Advanced Electrical Components','3x Processor'],                                   craftedAt:'Gear Bench 3' },
+  { name:'Tactical Mk. 3 (Revival)', type:'Augment',   recipe:['2x Advanced Electrical Components','3x Processor'],                                   craftedAt:'Gear Bench 3' },
+  { name:'Tagging Grenade',           type:'Grenade',   recipe:['1x Electrical Components','1x Sensors'],                                             craftedAt:'Utility Station 3' },
+  { name:'Tempest',                   type:'Weapon',    recipe:['3x Advanced Mechanical Components','3x Medium Gun Parts','3x Canister'],              craftedAt:'Gunsmith 3' },
+  { name:'Torrente',                  type:'Weapon',    recipe:['2x Advanced Mechanical Components','3x Medium Gun Parts','6x Steel Spring'],          craftedAt:'Gunsmith 3' },
+  { name:'Trailblazer',               type:'Grenade',   recipe:['1x Explosive Compound','1x Synthesized Fuel'],                                       craftedAt:'Explosives Station 3' },
+  { name:"Trigger 'Nade",             type:'Grenade',   recipe:['2x Crude Explosives','1x Processor'],                                                craftedAt:'Explosives Station 2' },
+  { name:'Venator',                   type:'Weapon',    recipe:['2x Advanced Mechanical Components','3x Medium Gun Parts','5x Magnet'],                craftedAt:'Gunsmith 3' },
+  { name:'Vertical Grip II',          type:'Mod',       recipe:['2x Mechanical Components','3x Duct Tape'],                                           craftedAt:'Gunsmith 2' },
+  { name:'Vertical Grip III',         type:'Mod',       recipe:['2x Mod Components','5x Duct Tape'],                                                  craftedAt:'Gunsmith 3' },
+  { name:'Vita Shot',                 type:'Quick Use', recipe:['2x Antiseptic','1x Syringe'],                                                        craftedAt:'Medical Lab 3' },
+  { name:'Vita Spray',                type:'Quick Use', recipe:['3x Antiseptic','1x Canister'],                                                       craftedAt:'Medical Lab 3' },
+  { name:'Vulcano',                   type:'Weapon',    recipe:['1x Magnetic Accelerator','3x Heavy Gun Parts','1x Exodus Modules'],                   craftedAt:'Gunsmith 3' },
+  { name:'Wolfpack',                  type:'Grenade',   recipe:['2x Explosive Compound','2x Sensors'],                                                craftedAt:'Explosives Station 3' },
+  { name:'Yellow Light Stick',        type:'Quick Use', recipe:['3x Chemicals'],                                                                       craftedAt:'Utility Station 1' },
 ];
 
 const TYPE_COLOR = { Weapon:'#ff6b35', Grenade:'#ffcc44', Mine:'#ff3355', Augment:'#b06aff', Mod:'#00cfff', 'Quick Use':'#5eff3a', Material:'#556070', Ammo:'#556070', '???':'#2a3350' };
@@ -1057,7 +1057,7 @@ function refreshCollectBtn() {
   if (!activeItem) return;
   const col = isCollected(activeItem.name);
   const btn = document.getElementById('collectBtn');
-  btn.textContent = col ? '✓  Collected' : 'Mark as Collected';
+  btn.textContent = col ? '✓  Collected — Click to Undo' : 'Mark as Collected';
   btn.className   = 'detail-collect-btn' + (col ? ' is-collected' : '');
 }
 
@@ -1069,10 +1069,14 @@ function closeDetail() {
 // ── Events ──
 document.getElementById('collectBtn').addEventListener('click', () => {
   if (!activeItem) return;
-  setCollected(activeItem.name, true);
+  if (isCollected(activeItem.name)) {
+    delete state[activeItem.name];
+    save();
+  } else {
+    setCollected(activeItem.name, true);
+  }
   refreshCollectBtn();
   render();
-  closeDetail();
 });
 
 document.getElementById('detailClose').addEventListener('click', closeDetail);
