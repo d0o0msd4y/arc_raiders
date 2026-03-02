@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARC Raiders – Achievement Checklist</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080b10;
+    --surface: #0d1420;
+    --border: #1a2a3a;
+    --accent: #00c8ff;
+    --accent2: #ff5e00;
+    --text: #c8d8e8;
+    --dim: #5a7080;
+    --complete: #00ff88;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Share Tech Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 24px 16px 48px;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,200,255,0.03) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,200,255,0.03) 40px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 36px;
+    padding: 32px 16px;
+    border: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(0,200,255,0.05) 0%, transparent 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before, header::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--accent), transparent);
+  }
+  header::before { left: 0; }
+  header::after { right: 0; }
+
+  .home-link {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: rgba(0,200,255,0.06);
+    transition: all 0.2s ease;
+  }
+
+  .home-link:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 10px rgba(0,200,255,0.25);
+  }
+
+  h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.4rem, 4vw, 2.4rem);
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: #fff;
+    text-shadow: 0 0 30px rgba(0,200,255,0.6), 0 0 60px rgba(0,200,255,0.2);
+  }
+
+  h1 span { color: var(--accent); }
+
+  .subtitle {
+    margin-top: 8px;
+    font-size: 0.75rem;
+    color: var(--dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* Progress bar */
+  .progress-section {
+    margin-bottom: 28px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .progress-count {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .progress-bar-outer {
+    height: 8px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .progress-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--complete));
+    width: 0%;
+    transition: width 0.4s ease;
+    box-shadow: 0 0 12px rgba(0,200,255,0.5);
+  }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    align-items: center;
+  }
+
+  .data-tools {
+    margin-bottom: 24px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    background: rgba(0,200,255,0.04);
+  }
+
+  .data-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .data-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--accent);
+    padding: 6px 14px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .data-btn:hover {
+    border-color: var(--accent);
+    background: rgba(0,200,255,0.08);
+  }
+
+  .data-note {
+    font-size: 0.72rem;
+    color: var(--dim);
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+
+  .data-details {
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    color: var(--dim);
+    font-size: 0.75rem;
+  }
+
+  .data-details summary {
+    cursor: pointer;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .data-details ol {
+    margin: 10px 0 0 18px;
+    line-height: 1.5;
+  }
+
+  .controls input[type="text"] {
+    flex: 1;
+    min-width: 200px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 14px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .controls input[type="text"]:focus { border-color: var(--accent); }
+  .controls input[type="text"]::placeholder { color: var(--dim); }
+
+  .filter-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--dim);
+    padding: 8px 16px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+  }
+
+  .filter-btn.active, .filter-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,200,255,0.06);
+  }
+
+  .btn-reset {
+    background: transparent;
+    border: 1px solid rgba(255,94,0,0.4);
+    color: var(--accent2);
+    padding: 8px 16px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+    margin-left: auto;
+  }
+  .btn-reset:hover { border-color: var(--accent2); background: rgba(255,94,0,0.06); }
+
+  /* Section */
+  .section-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dim);
+    padding: 10px 0 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--accent2);
+    transform: rotate(45deg);
+  }
+
+  /* Reveal toggle button */
+  .reveal-btn {
+    margin-left: auto;
+    background: transparent;
+    border: 1px solid rgba(255,94,0,0.5);
+    color: var(--accent2);
+    padding: 3px 12px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .reveal-btn:hover { background: rgba(255,94,0,0.1); border-color: var(--accent2); }
+  .reveal-btn.revealed { border-color: rgba(0,200,255,0.4); color: var(--accent); }
+  .reveal-btn.revealed:hover { background: rgba(0,200,255,0.06); border-color: var(--accent); }
+
+  /* Achievement items */
+  .achievement-list { margin-bottom: 24px; }
+
+  .achievement-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px 14px;
+    border: 1px solid transparent;
+    border-bottom-color: var(--border);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    user-select: none;
+  }
+
+  .achievement-item:hover {
+    background: rgba(0,200,255,0.03);
+    border-color: rgba(0,200,255,0.15);
+    border-bottom-color: rgba(0,200,255,0.15);
+  }
+
+  .achievement-item.completed {
+    background: rgba(0,255,136,0.04);
+    border-bottom-color: rgba(0,255,136,0.15);
+  }
+
+  .achievement-item.completed .ach-name {
+    color: var(--complete);
+    text-decoration: line-through;
+    text-decoration-color: rgba(0,255,136,0.4);
+  }
+
+  .achievement-item.completed .ach-desc { opacity: 0.4; }
+
+  .achievement-item.hidden-item .ach-name { color: var(--accent2); }
+  .section-badge {
+    font-size: 0.6rem;
+    color: var(--accent2);
+    border: 1px solid rgba(255,94,0,0.4);
+    padding: 1px 5px;
+    vertical-align: middle;
+    margin-left: 6px;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  /* Redacted state */
+  .achievement-item.redacted {
+    cursor: default;
+    pointer-events: none;
+  }
+  .achievement-item.redacted .ach-desc {
+    color: var(--accent2);
+    opacity: 0.4;
+    letter-spacing: 0.05em;
+    font-size: 0.85rem;
+  }
+  .achievement-item.redacted .checkbox {
+    border-color: rgba(255,94,0,0.25);
+  }
+  .achievement-item.redacted:hover {
+    background: transparent;
+    border-color: transparent;
+    border-bottom-color: var(--border);
+  }
+
+  /* Custom checkbox */
+  .checkbox {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--dim);
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .achievement-item.completed .checkbox {
+    border-color: var(--complete);
+    background: rgba(0,255,136,0.1);
+  }
+
+  .checkbox-tick {
+    display: none;
+    color: var(--complete);
+    font-size: 13px;
+    line-height: 1;
+  }
+  .achievement-item.completed .checkbox-tick { display: block; }
+
+  .ach-info { flex: 1; }
+  .ach-name {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #e0eef8;
+    letter-spacing: 0.04em;
+    margin-bottom: 3px;
+  }
+  .ach-desc {
+    font-size: 0.78rem;
+    color: var(--dim);
+    line-height: 1.4;
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 40px;
+    color: var(--dim);
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <a class="home-link" href="index.html">← Home</a>
+    <h1>ARC <span>RAIDERS</span></h1>
+    <div class="subtitle">Achievement Checklist &bull; 50 Total &bull; 1,000 Gamerscore</div>
+  </header>
+
+  <div class="progress-section">
+    <div class="progress-label">
+      <span>Completion Progress</span>
+      <span class="progress-count"><span id="completed-count">0</span> / 50</span>
+    </div>
+    <div class="progress-bar-outer">
+      <div class="progress-bar-inner" id="progress-bar"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="search" placeholder="Search achievements...">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="incomplete">Incomplete</button>
+    <button class="filter-btn" data-filter="complete">Complete</button>
+    <button class="btn-reset" id="reset-btn">Reset All</button>
+  </div>
+
+  <div class="data-tools">
+    <div class="data-actions">
+      <button class="data-btn" id="export-btn">Export Progress</button>
+      <button class="data-btn" id="import-btn">Import Progress</button>
+      <input type="file" id="import-file" accept="application/json" hidden>
+    </div>
+    <p class="data-note">Progress is stored in your browser (local storage). Clearing site data/cache will erase it.</p>
+    <details class="data-details">
+      <summary>Move progress to a new browser</summary>
+      <ol>
+        <li>Click <strong>Export Progress</strong> and save the JSON file.</li>
+        <li>Open this page in the new browser/device.</li>
+        <li>Click <strong>Import Progress</strong> and select the saved file.</li>
+      </ol>
+    </details>
+  </div>
+
+  <div id="achievement-container"></div>
+</div>
+
+<script>
+const achievements = {
+  "General": [
+    { name: "Practice Makes Perfect", desc: "Visit the Practice Range." },
+    { name: "Rite of Passage", desc: "Safely return to Speranza for the first time." },
+    { name: "Self-Sufficient", desc: "Install a station in your Workshop." },
+    { name: "In Your Element", desc: "Reach level 10." },
+    { name: "Getting Serious", desc: "Upgrade a Workshop station to level 2." },
+    { name: "Well-Travelled", desc: "Safely return from Dam Battlegrounds, Buried City and Spaceport." },
+    { name: "Scavenger", desc: "Search 50 item containers." },
+    { name: "Escape Artist", desc: "Safely return to Speranza 100 times." },
+    { name: "Dedicated to the Craft", desc: "Have five stations upgraded to level 3 or higher." },
+    { name: "Legend of Speranza", desc: "Reach level 75." },
+    { name: "The Long Haul", desc: "Reach a total lifetime loot value of 1,000,000." },
+  ],
+  "Combat & Weapons": [
+    { name: "Well-Armed", desc: "Have two weapons of Tier II or higher equipped in a round." },
+    { name: "Shots Fired", desc: "Deal 1,000 damage to ARC enemies." },
+    { name: "Racking Them Up", desc: "Destroy 50 ARC enemies." },
+    { name: "Trail of Destruction", desc: "Destroy 100 ARC enemies." },
+    { name: "Expert Weaponsmith", desc: "Upgrade a weapon to Tier IV." },
+    { name: "Bells and Whistles", desc: "Have 4 weapon mods on a single weapon." },
+    { name: "Long Shot", desc: "Hit a target over 250 meters away." },
+    { name: "Comparative Study", desc: "Use 4 different weapons to deal damage in the Practice Range." },
+    { name: "For Science!", desc: "Get gas, stun, and burn statuses at the same time." },
+    { name: "Three Birds, One Stone", desc: "Destroy 3 ARC enemies with a single Wolfpack grenade." },
+    { name: "Hook, Line, and Sinker", desc: "Use a Lure Grenade to make a drone attack another drone." },
+    { name: "Mechanical Failure", desc: "Shoot a thruster off a Wasp." },
+  ],
+  "ARC Enemy Kills": [
+    { name: "Bringing Down the Big Guns", desc: "Destroy a Rocketeer." },
+    { name: "Into the Breach", desc: "Destroy a Bastion." },
+    { name: "A Tale for the Ages", desc: "Destroy the Queen." },
+    { name: "Blindsided", desc: "Destroy a Sentinel with a Raider Tool (pickaxe)." },
+    { name: "Snitches Get Stitches", desc: "Destroy a Snitch with a Stitcher." },
+  ],
+  "Raider Encounters": [
+    { name: "Crossed the Threshold", desc: "Knock out a Raider. (Must fully eliminate or get surrender — downing alone is not enough.)" },
+    { name: "Unyielding", desc: "Knock out 10 Raiders." },
+    { name: "Up Close and Personal", desc: "Knock out a Raider with a Raider Tool (pickaxe)." },
+    { name: "Horseshoes and Hand Grenades", desc: "Down an encountered Raider with a grenade." },
+    { name: "Today You, Tomorrow Me", desc: "Revive a Raider outside your squad using a Defibrillator." },
+    { name: "The Friends We Made Along The Way", desc: "Return to Speranza together with a stranger (not in your party)." },
+    { name: "Heart of Gold", desc: "Be thanked 10 times in direct response to something you did." },
+  ],
+  "Loot & Economy": [
+    { name: "The Big Haul", desc: "Return to Speranza with 50,000 worth of loot." },
+    { name: "Back from the Brink", desc: "Revive a squadmate ten times." },
+  ],
+  "Exploration": [
+    { name: "Behind Closed Doors", desc: "Visit a locked room on Dam Battlegrounds, Buried City or Spaceport." },
+    { name: "Into Thin Air", desc: "Safely return to Speranza through a Raider Hatch." },
+    { name: "Not Over Till It's Over", desc: "Safely return to Speranza while downed." },
+    { name: "Same Song, Same Verse", desc: "Set off two car alarms of the same kind in a single round." },
+    { name: "Most Durable Pants in Speranza", desc: "Slide 80 meters without stopping." },
+    { name: "In the Nick of Time", desc: "Safely return to Speranza with less than 5 seconds left in the round." },
+    { name: "No Going Back", desc: "Be topside when the safe window closes." },
+  ],
+  "Hidden Achievements": [
+    { name: "A Vendetta is Born", desc: "Get downed and knocked out while inside a return point.", hidden: true },
+    { name: "Just Dropping In", desc: "Get hit by a Supply Drop.", hidden: true },
+    { name: "Death From Above", desc: "Deal 50 damage to any enemy while atop a Rocketeer.", hidden: true },
+    { name: "Enemy of My Enemy", desc: "Get an encountered Raider downed by ARC enemies summoned with a Snitch Scanner.", hidden: true },
+    { name: "See You Never", desc: "Return safely to Speranza while leaving behind a living squadmate.", hidden: true },
+    { name: "Top of the World", desc: "Reach the top of the Launch Towers in Spaceport.", hidden: true },
+  ]
+};
+
+const TOTAL = 50;
+const REDACTED_TEXT = '█████████████████████████████████████';
+
+// Default progress (Jake's saves) – only applied if no existing data
+const DEFAULT_PROGRESS = {
+  "Practice Makes Perfect": true,
+  "Rite of Passage": true,
+  "Self-Sufficient": true,
+  "In Your Element": true,
+  "Getting Serious": true,
+  "Well-Travelled": true,
+  "Scavenger": true,
+  "Escape Artist": true,
+  "Dedicated to the Craft": true,
+  "Legend of Speranza": true,
+  "The Long Haul": true,
+  "Well-Armed": true,
+  "Shots Fired": true,
+  "Racking Them Up": true,
+  "Trail of Destruction": true,
+  "Expert Weaponsmith": true,
+  "Bells and Whistles": true,
+  "Long Shot": true,
+  "Comparative Study": true,
+  "For Science!": true,
+  "Three Birds, One Stone": true,
+  "Mechanical Failure": true,
+  "Bringing Down the Big Guns": true,
+  "Into the Breach": true,
+  "A Tale for the Ages": true,
+  "Snitches Get Stitches": true,
+  "Crossed the Threshold": true,
+  "Unyielding": true,
+  "Horseshoes and Hand Grenades": true,
+  "Today You, Tomorrow Me": true,
+  "The Friends We Made Along The Way": true,
+  "The Big Haul": true,
+  "Back from the Brink": true,
+  "Behind Closed Doors": true,
+  "Into Thin Air": true,
+  "Not Over Till It's Over": true,
+  "Same Song, Same Verse": true,
+  "Most Durable Pants in Speranza": true,
+  "In the Nick of Time": true,
+  "No Going Back": true,
+  "A Vendetta is Born": true,
+  "See You Never": true,
+  "Top of the World": true
+};
+
+// Load state – use saved data if it exists, otherwise apply defaults
+let completed = JSON.parse(localStorage.getItem('arc-achievements') || 'null') || { ...DEFAULT_PROGRESS };
+if (!localStorage.getItem('arc-achievements')) save();
+let hiddenRevealed = JSON.parse(localStorage.getItem('arc-hidden-revealed') || 'false');
+let currentFilter = 'all';
+let searchQuery = '';
+
+function save() {
+  localStorage.setItem('arc-achievements', JSON.stringify(completed));
+}
+
+function saveReveal() {
+  localStorage.setItem('arc-hidden-revealed', JSON.stringify(hiddenRevealed));
+}
+
+function downloadJson(data, filename) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+function applyImportedData(data) {
+  if (!data || typeof data !== 'object') return false;
+  if (!data.completed || typeof data.completed !== 'object') return false;
+  completed = data.completed;
+  hiddenRevealed = !!data.hiddenRevealed;
+  save();
+  saveReveal();
+  updateProgress();
+  render();
+  return true;
+}
+
+function updateProgress() {
+  const count = Object.values(completed).filter(Boolean).length;
+  document.getElementById('completed-count').textContent = count;
+  document.getElementById('progress-bar').style.width = (count / TOTAL * 100) + '%';
+}
+
+function render() {
+  const container = document.getElementById('achievement-container');
+  container.innerHTML = '';
+  let anyVisible = false;
+
+  Object.entries(achievements).forEach(([section, items]) => {
+    const isHiddenSection = section === 'Hidden Achievements';
+
+    const filteredItems = items.filter(item => {
+      const isCompleted = !!completed[item.name];
+      if (currentFilter === 'complete' && !isCompleted) return false;
+      if (currentFilter === 'incomplete' && isCompleted) return false;
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        return item.name.toLowerCase().includes(q) || item.desc.toLowerCase().includes(q);
+      }
+      return true;
+    });
+
+    if (filteredItems.length === 0) return;
+    anyVisible = true;
+
+    const sectionEl = document.createElement('div');
+    sectionEl.className = 'achievement-list';
+
+    // Section title row
+    const titleEl = document.createElement('div');
+    titleEl.className = 'section-title';
+    const titleText = document.createTextNode(section);
+    titleEl.appendChild(titleText);
+
+    if (isHiddenSection) {
+      const revealBtn = document.createElement('button');
+      revealBtn.className = 'reveal-btn' + (hiddenRevealed ? ' revealed' : '');
+      revealBtn.textContent = hiddenRevealed ? '🔓 Hide Spoilers' : '🔒 Reveal Spoilers';
+      revealBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        hiddenRevealed = !hiddenRevealed;
+        saveReveal();
+        render();
+      });
+      titleEl.appendChild(revealBtn);
+    }
+
+    sectionEl.appendChild(titleEl);
+
+    // Achievement rows
+    filteredItems.forEach(item => {
+      const key = item.name;
+      const isCompleted = !!completed[key];
+      const isRedacted = isHiddenSection && !hiddenRevealed;
+
+      const el = document.createElement('div');
+      el.className = [
+        'achievement-item',
+        isCompleted ? 'completed' : '',
+        isHiddenSection ? 'hidden-item' : '',
+        isRedacted ? 'redacted' : ''
+      ].filter(Boolean).join(' ');
+
+      el.innerHTML = `
+        <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+        <div class="ach-info">
+          <div class="ach-name">${item.name}<span class="section-badge" style="${isHiddenSection ? '' : 'display:none'}">HIDDEN</span></div>
+          <div class="ach-desc">${isRedacted ? REDACTED_TEXT : item.desc}</div>
+        </div>
+      `;
+
+      if (!isRedacted) {
+        el.addEventListener('click', () => {
+          completed[key] = !completed[key];
+          save();
+          updateProgress();
+          render();
+        });
+      }
+
+      sectionEl.appendChild(el);
+    });
+
+    container.appendChild(sectionEl);
+  });
+
+  if (!anyVisible) {
+    container.innerHTML = '<div class="no-results">NO ACHIEVEMENTS MATCH YOUR FILTER</div>';
+  }
+}
+
+// Filter buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    render();
+  });
+});
+
+// Search
+document.getElementById('search').addEventListener('input', e => {
+  searchQuery = e.target.value.trim();
+  render();
+});
+
+// Reset
+document.getElementById('reset-btn').addEventListener('click', () => {
+  if (confirm('Reset all achievements?')) {
+    completed = {};
+    save();
+    updateProgress();
+    render();
+  }
+});
+
+document.getElementById('export-btn').addEventListener('click', () => {
+  downloadJson({ completed, hiddenRevealed }, 'arc-raiders-achievements.json');
+});
+
+document.getElementById('import-btn').addEventListener('click', () => {
+  document.getElementById('import-file').click();
+});
+
+document.getElementById('import-file').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      if (!applyImportedData(data)) {
+        alert('Invalid file format.');
+      }
+    } catch (err) {
+      alert('Could not read file.');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+
+updateProgress();
+render();
+</script>
+</body>
+</html>

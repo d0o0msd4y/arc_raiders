@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARC Raiders – Scrappy Crafting Checklist</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #111520;
+    --surface2: #161b28;
+    --border: #1e2840;
+    --accent: #00d4ff;
+    --accent2: #ff6b35;
+    --accent3: #7fff5f;
+    --text: #c8d4e8;
+    --text-dim: #5a6a8a;
+    --done: #1a2a1a;
+    --done-text: #3a5a3a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid scanline background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,212,255,0.03) 40px),
+                repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,212,255,0.03) 40px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 20px; }
+
+  header {
+    text-align: center;
+    padding: 30px 0 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .home-link {
+    position: absolute;
+    top: 6px;
+    left: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: rgba(0,212,255,0.06);
+    transition: all 0.2s ease;
+  }
+
+  .home-link:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 10px rgba(0,212,255,0.25);
+  }
+
+  header h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.4rem, 4vw, 2.4rem);
+    font-weight: 900;
+    color: var(--accent);
+    text-shadow: 0 0 20px rgba(0,212,255,0.5);
+    letter-spacing: 0.05em;
+  }
+
+  header p {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    margin-top: 6px;
+    letter-spacing: 0.1em;
+  }
+
+  /* Controls bar */
+  .controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    align-items: center;
+  }
+
+  .data-tools {
+    margin-bottom: 20px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    background: rgba(0,212,255,0.04);
+  }
+
+  .data-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .data-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--accent);
+    padding: 6px 14px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .data-btn:hover {
+    border-color: var(--accent);
+    background: rgba(0,212,255,0.08);
+  }
+
+  .data-note {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+
+  .data-details {
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    color: var(--text-dim);
+    font-size: 0.75rem;
+  }
+
+  .data-details summary {
+    cursor: pointer;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .data-details ol {
+    margin: 10px 0 0 18px;
+    line-height: 1.5;
+  }
+
+  .filter-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 6px 14px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,212,255,0.07);
+  }
+
+  .search-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 12px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    flex: 1;
+    min-width: 160px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .search-box:focus { border-color: var(--accent); }
+  .search-box::placeholder { color: var(--text-dim); }
+
+  .reset-btn {
+    background: transparent;
+    border: 1px solid #3a2020;
+    color: #aa4444;
+    padding: 6px 14px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.15s;
+    margin-left: auto;
+  }
+
+  .reset-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  /* Progress bar */
+  .progress-bar-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent3));
+    transition: width 0.4s ease;
+    box-shadow: 0 0 10px rgba(0,212,255,0.5);
+  }
+
+  .progress-label {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+    letter-spacing: 0.08em;
+  }
+
+  /* Upgrade sections */
+  .section-header {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent2);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 10px 0 8px;
+    border-bottom: 1px solid var(--border);
+    margin: 28px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-header::before {
+    content: '';
+    width: 4px;
+    height: 16px;
+    background: var(--accent2);
+    display: inline-block;
+    box-shadow: 0 0 8px rgba(255,107,53,0.6);
+  }
+
+  /* Upgrade card */
+  .upgrade-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    margin-bottom: 8px;
+    transition: border-color 0.15s;
+  }
+
+  .upgrade-card:hover { border-color: #2a3860; }
+
+  .upgrade-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .upgrade-title-row:hover { background: rgba(255,255,255,0.02); }
+
+  .expand-icon {
+    color: var(--text-dim);
+    font-size: 0.7rem;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .upgrade-card.expanded .expand-icon { transform: rotate(90deg); }
+
+  .upgrade-name {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.05em;
+    flex: 1;
+  }
+
+  .upgrade-progress-mini {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+
+  .upgrade-progress-mini.complete { color: var(--accent3); }
+
+  /* Items list */
+  .items-list {
+    display: none;
+    padding: 0 14px 12px 14px;
+    background: var(--surface2);
+    border-top: 1px solid var(--border);
+  }
+
+  .upgrade-card.expanded .items-list { display: block; }
+
+  /* Single item row */
+  .item-row {
+    display: grid;
+    grid-template-columns: 32px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: opacity 0.2s;
+  }
+
+  .item-row:last-child { border-bottom: none; }
+  .item-row.done { opacity: 0.35; }
+  .item-row.done .item-name { text-decoration: line-through; color: var(--done-text); }
+
+  /* Checkbox */
+  .item-check {
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    cursor: pointer;
+    appearance: none;
+    display: grid;
+    place-items: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .item-check:checked { background: rgba(127,255,95,0.15); border-color: var(--accent3); }
+  .item-check:checked::after { content: '✓'; color: var(--accent3); font-size: 14px; }
+
+  .item-name-col { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+
+  .item-name { font-size: 0.85rem; color: var(--text); }
+
+  .item-needed-label {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+
+  /* Shortage badge */
+  .shortage {
+    display: inline-block;
+    font-size: 0.65rem;
+    padding: 1px 6px;
+    margin-left: 6px;
+    background: rgba(255,107,53,0.15);
+    border: 1px solid rgba(255,107,53,0.4);
+    color: var(--accent2);
+    white-space: nowrap;
+  }
+  .have-enough {
+    display: inline-block;
+    font-size: 0.65rem;
+    padding: 1px 6px;
+    margin-left: 6px;
+    background: rgba(127,255,95,0.1);
+    border: 1px solid rgba(127,255,95,0.3);
+    color: var(--accent3);
+    white-space: nowrap;
+  }
+
+  /* ── ARC Raiders–style stepper ── */
+  .arc-stepper {
+    display: flex;
+    align-items: stretch;
+    height: 44px;
+    flex-shrink: 0;
+    border: 1px solid #1e2840;
+    overflow: hidden;
+  }
+
+  /* The ‹ (minus) button — has the rainbow stripe on its LEFT edge */
+  .arc-btn {
+    position: relative;
+    width: 44px;
+    background: #0d1018;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: #8898bb;
+    font-family: 'Orbitron', monospace;
+    font-weight: 900;
+    transition: background 0.1s, color 0.1s;
+    overflow: hidden;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .arc-btn:active { background: #161c2a; color: #fff; }
+
+
+
+  /* Plus button gets a right-edge accent */
+  .arc-btn-plus {
+    border-left: 1px solid #1e2840;
+  }
+
+  /* The count display in the middle */
+  .arc-count {
+    min-width: 48px;
+    background: #0d1018;
+    border-left: 1px solid #1e2840;
+    border-right: 1px solid #1e2840;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.05em;
+    cursor: default;
+    user-select: none;
+    padding: 0 4px;
+  }
+
+  .arc-count.zero { color: var(--text-dim); }
+
+  .no-results {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 40px 0;
+    letter-spacing: 0.1em;
+  }
+
+  @media (max-width: 500px) {
+    .item-row { grid-template-columns: 28px 1fr; }
+    .arc-stepper { grid-column: 1 / -1; margin-left: 38px; width: fit-content; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <a class="home-link" href="index.html">← Home</a>
+    <h1>◈ ARC RAIDERS</h1>
+    <p>SCRAPPY / WORKSHOP UPGRADE CHECKLIST &nbsp;|&nbsp; CRAFTING TRACKER</p>
+  </header>
+
+  <div class="controls">
+    <button class="filter-btn active" data-filter="all">ALL</button>
+    <button class="filter-btn" data-filter="incomplete">INCOMPLETE</button>
+    <button class="filter-btn" data-filter="complete">COMPLETE</button>
+    <input class="search-box" type="text" placeholder="Search items or upgrades…" id="searchBox">
+    <button class="reset-btn" id="resetBtn">⟳ RESET</button>
+  </div>
+
+  <div class="data-tools">
+    <div class="data-actions">
+      <button class="data-btn" id="export-btn">Export Progress</button>
+      <button class="data-btn" id="import-btn">Import Progress</button>
+      <input type="file" id="import-file" accept="application/json" hidden>
+    </div>
+    <p class="data-note">Progress is stored in your browser (local storage). Clearing site data/cache will erase it.</p>
+    <details class="data-details">
+      <summary>Move progress to a new browser</summary>
+      <ol>
+        <li>Click <strong>Export Progress</strong> and save the JSON file.</li>
+        <li>Open this page in the new browser/device.</li>
+        <li>Click <strong>Import Progress</strong> and select the saved file.</li>
+      </ol>
+    </details>
+  </div>
+
+  <div class="progress-label" id="progressLabel">OVERALL PROGRESS — 0 / 0 ITEMS CHECKED</div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+
+  <div id="app"></div>
+</div>
+
+<script>
+const DATA = [
+  {
+    section: "SCRAPPY UPGRADES",
+    upgrades: [
+      { name: "Scrappy 2", items: [{ name: "Dog Collar", needed: 1 }] },
+      { name: "Scrappy 3", items: [{ name: "Lemons", needed: 3 }, { name: "Apricots", needed: 3 }] },
+      { name: "Scrappy 4", items: [{ name: "Prickly Pears", needed: 6 }, { name: "Olives", needed: 6 }, { name: "Cat Bed", needed: 1 }] },
+      { name: "Scrappy 5", items: [{ name: "Mushrooms", needed: 12 }, { name: "Apricots", needed: 12 }, { name: "Very Comfortable Pillow", needed: 3 }] },
+    ]
+  },
+  {
+    section: "GUNSMITH",
+    upgrades: [
+      { name: "Gunsmith 1", items: [{ name: "Metal Parts", needed: 20 }, { name: "Rubber Parts", needed: 30 }] },
+      { name: "Gunsmith 2", items: [{ name: "Rusted Tools", needed: 3 }, { name: "Mechanical Components", needed: 5 }, { name: "Wasp Driver", needed: 8 }] },
+      { name: "Gunsmith 3", items: [{ name: "Rusted Gear", needed: 3 }, { name: "Advanced Mechanical Components", needed: 5 }, { name: "Sentinel Firing Core", needed: 4 }] },
+    ]
+  },
+  {
+    section: "GEAR BENCH",
+    upgrades: [
+      { name: "Gear Bench 1", items: [{ name: "Plastic Parts", needed: 25 }, { name: "Fabric", needed: 30 }] },
+      { name: "Gear Bench 2", items: [{ name: "Power Cable", needed: 3 }, { name: "Electrical Components", needed: 5 }, { name: "Hornet Driver", needed: 5 }] },
+      { name: "Gear Bench 3", items: [{ name: "Industrial Battery", needed: 3 }, { name: "Advanced Electrical Components", needed: 5 }, { name: "Bastion Cell", needed: 6 }] },
+    ]
+  },
+  {
+    section: "MEDICAL LAB",
+    upgrades: [
+      { name: "Medical Lab 1", items: [{ name: "Fabric", needed: 50 }, { name: "ARC Alloy", needed: 6 }] },
+      { name: "Medical Lab 2", items: [{ name: "Cracked Bioscanner", needed: 2 }, { name: "Durable Cloth", needed: 5 }, { name: "Tick Pod", needed: 8 }] },
+      { name: "Medical Lab 3", items: [{ name: "Rusted Shut Medical Kit", needed: 3 }, { name: "Antiseptic", needed: 8 }, { name: "Surveyor Vault", needed: 5 }] },
+    ]
+  },
+  {
+    section: "EXPLOSIVES BENCH",
+    upgrades: [
+      { name: "Explosives Bench 1", items: [{ name: "Rubber Parts", needed: 50 }, { name: "ARC Alloy", needed: 6 }] },
+      { name: "Explosives Bench 2", items: [{ name: "Synthesized Fuel", needed: 3 }, { name: "Crude Explosives", needed: 5 }, { name: "Pop Trigger", needed: 5 }] },
+      { name: "Explosives Bench 3", items: [{ name: "Laboratory Reagents", needed: 3 }, { name: "Explosive Compound", needed: 5 }, { name: "Rocketeer Driver", needed: 3 }] },
+    ]
+  },
+  {
+    section: "UTILITY STATION",
+    upgrades: [
+      { name: "Utility Station 1", items: [{ name: "Plastic Parts", needed: 50 }, { name: "ARC Alloy", needed: 6 }] },
+      { name: "Utility Station 2", items: [{ name: "Damaged Heat Sink", needed: 2 }, { name: "Electrical Components", needed: 5 }, { name: "Snitch Scanner", needed: 6 }] },
+      { name: "Utility Station 3", items: [{ name: "Fried Motherboard", needed: 3 }, { name: "Advanced Electrical Components", needed: 5 }, { name: "Leaper Pulse Unit", needed: 4 }] },
+    ]
+  },
+  {
+    section: "REFINER",
+    upgrades: [
+      { name: "Refiner 1", items: [{ name: "Metal Parts", needed: 60 }, { name: "ARC Powercell", needed: 5 }] },
+      { name: "Refiner 2", items: [{ name: "Toaster", needed: 3 }, { name: "ARC Motion Core", needed: 5 }, { name: "Fireball Burner", needed: 8 }] },
+      { name: "Refiner 3", items: [{ name: "Motor", needed: 3 }, { name: "ARC Circuitry", needed: 10 }, { name: "Bombardier Cell", needed: 6 }] },
+    ]
+  },
+  {
+    section: "QUESTS",
+    upgrades: [
+      { name: "Clearer Skies", items: [{ name: "ARC Alloy", needed: 3 }] },
+      { name: "Trash Into Treasure", items: [{ name: "Wires", needed: 6 }, { name: "Battery", needed: 1 }] },
+      { name: "The Trifecta", items: [{ name: "Snitch Scanner", needed: 2 }, { name: "Wasp Driver", needed: 2 }, { name: "Hornet Driver", needed: 2 }] },
+      { name: "Mixed Signals", items: [{ name: "Surveyor Vault", needed: 1 }] },
+      { name: "Unexpected Initiative", items: [{ name: "Water Pump", needed: 1 }] },
+      { name: "Out of the Shadows", items: [{ name: "Rocketeer Driver", needed: 1 }] },
+      { name: "Doctor's Orders", items: [{ name: "Antiseptic", needed: 2 }, { name: "Syringe", needed: 1 }, { name: "Durable Cloth", needed: 1 }, { name: "Great Mullenin", needed: 1 }] },
+      { name: "A Reveal in Ruins", items: [{ name: "ESR Analyzer", needed: 1 }] },
+    ]
+  },
+  {
+    section: "EXPEDITION",
+    upgrades: [
+      { name: "Part 1", items: [{ name: "Metal Parts", needed: 150 }, { name: "Rubber Parts", needed: 200 }, { name: "ARC Alloy", needed: 80 }, { name: "Steel Spring", needed: 15 }] },
+      { name: "Part 2", items: [{ name: "Durable Cloth", needed: 35 }, { name: "Wires", needed: 30 }, { name: "Electrical Components", needed: 30 }, { name: "Cooling Coil", needed: 4 }] },
+      { name: "Part 3", items: [{ name: "Light Bulb", needed: 4 }, { name: "Battery", needed: 30 }, { name: "Shredder Gyro", needed: 10 }, { name: "Exodus Modules", needed: 1 }] },
+      { name: "Part 4", items: [{ name: "Frequency Modulation Box", needed: 5 }, { name: "Advanced Electrical Components", needed: 5 }, { name: "Ion Sputter", needed: 3 }, { name: "Leaper Pulse Unit", needed: 3 }] },
+    ]
+  },
+];
+
+// State: { "section:upgrade:itemName": { checked: bool, inv: number } }
+let state = {};
+const STORAGE_KEY = 'arc_raiders_checklist_v1';
+
+function loadState() {
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    if (s) state = JSON.parse(s);
+  } catch(e) {}
+}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+function downloadJson(data, filename) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+function applyImportedData(data) {
+  if (!data) return false;
+  const nextState = data.state && typeof data.state === 'object' ? data.state : data;
+  if (!nextState || typeof nextState !== 'object') return false;
+  state = nextState;
+  saveState();
+  render();
+  return true;
+}
+
+function itemKey(section, upgradeName, itemName) {
+  return `${section}|${upgradeName}|${itemName}`;
+}
+
+function getItemState(section, upgradeName, itemName) {
+  const k = itemKey(section, upgradeName, itemName);
+  return state[k] || { checked: false, inv: '' };
+}
+
+function setItemState(section, upgradeName, itemName, updates) {
+  const k = itemKey(section, upgradeName, itemName);
+  state[k] = { ...getItemState(section, upgradeName, itemName), ...updates };
+  saveState();
+  updateProgress();
+}
+
+let currentFilter = 'all';
+let currentSearch = '';
+
+function allItems() {
+  const items = [];
+  DATA.forEach(sec => sec.upgrades.forEach(upg => upg.items.forEach(it => {
+    items.push({ section: sec.section, upgrade: upg.name, item: it });
+  })));
+  return items;
+}
+
+function updateProgress() {
+  const all = allItems();
+  const checked = all.filter(x => getItemState(x.section, x.upgrade, x.item.name).checked).length;
+  document.getElementById('progressLabel').textContent =
+    `OVERALL PROGRESS — ${checked} / ${all.length} ITEMS CHECKED`;
+  const pct = all.length ? (checked / all.length * 100).toFixed(1) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  // Update mini-progress on cards
+  document.querySelectorAll('.upgrade-card').forEach(card => {
+    const sec = card.dataset.section;
+    const upg = card.dataset.upgrade;
+    const secData = DATA.find(s => s.section === sec);
+    if (!secData) return;
+    const upgData = secData.upgrades.find(u => u.name === upg);
+    if (!upgData) return;
+    const total = upgData.items.length;
+    const done = upgData.items.filter(it => getItemState(sec, upg, it.name).checked).length;
+    const mini = card.querySelector('.upgrade-progress-mini');
+    if (mini) {
+      mini.textContent = `${done}/${total}`;
+      mini.className = 'upgrade-progress-mini' + (done === total ? ' complete' : '');
+    }
+  });
+}
+
+function isUpgradeMatch(sec, upg, search) {
+  if (!search) return true;
+  const q = search.toLowerCase();
+  if (upg.name.toLowerCase().includes(q)) return true;
+  if (sec.section.toLowerCase().includes(q)) return true;
+  return upg.items.some(it => it.name.toLowerCase().includes(q));
+}
+
+function isUpgradeFilterMatch(sec, upg, filter) {
+  if (filter === 'all') return true;
+  const allChecked = upg.items.every(it => getItemState(sec.section, upg.name, it.name).checked);
+  if (filter === 'complete') return allChecked;
+  if (filter === 'incomplete') return !allChecked;
+  return true;
+}
+
+function render() {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  let anyVisible = false;
+
+  DATA.forEach(sec => {
+    let sectionVisible = false;
+    const sectionEl = document.createElement('div');
+
+    const header = document.createElement('div');
+    header.className = 'section-header';
+    header.textContent = sec.section;
+    sectionEl.appendChild(header);
+
+    sec.upgrades.forEach(upg => {
+      if (!isUpgradeMatch(sec, upg, currentSearch)) return;
+      if (!isUpgradeFilterMatch(sec, upg, currentFilter)) return;
+      sectionVisible = true;
+      anyVisible = true;
+
+      const card = document.createElement('div');
+      card.className = 'upgrade-card';
+      card.dataset.section = sec.section;
+      card.dataset.upgrade = upg.name;
+
+      // Title row
+      const titleRow = document.createElement('div');
+      titleRow.className = 'upgrade-title-row';
+
+      const expandIcon = document.createElement('span');
+      expandIcon.className = 'expand-icon';
+      expandIcon.textContent = '▶';
+
+      const name = document.createElement('span');
+      name.className = 'upgrade-name';
+      name.textContent = upg.name;
+
+      const total = upg.items.length;
+      const done = upg.items.filter(it => getItemState(sec.section, upg.name, it.name).checked).length;
+      const mini = document.createElement('span');
+      mini.className = 'upgrade-progress-mini' + (done === total ? ' complete' : '');
+      mini.textContent = `${done}/${total}`;
+
+      titleRow.appendChild(expandIcon);
+      titleRow.appendChild(name);
+      titleRow.appendChild(mini);
+      titleRow.addEventListener('click', () => {
+        card.classList.toggle('expanded');
+      });
+
+      card.appendChild(titleRow);
+
+      // Items list
+      const itemsList = document.createElement('div');
+      itemsList.className = 'items-list';
+
+      upg.items.forEach(it => {
+        const istate = getItemState(sec.section, upg.name, it.name);
+        const row = document.createElement('div');
+        row.className = 'item-row' + (istate.checked ? ' done' : '');
+
+        const chk = document.createElement('input');
+        chk.type = 'checkbox';
+        chk.className = 'item-check';
+        chk.checked = istate.checked;
+
+        // Name column
+        const nameCol = document.createElement('div');
+        nameCol.className = 'item-name-col';
+
+        const nameEl = document.createElement('span');
+        nameEl.className = 'item-name';
+        nameEl.style.textDecoration = istate.checked ? 'line-through' : '';
+
+        const neededLabel = document.createElement('span');
+        neededLabel.className = 'item-needed-label';
+        neededLabel.textContent = `NEED: ${it.needed}`;
+
+        nameCol.appendChild(nameEl);
+        nameCol.appendChild(neededLabel);
+
+        // Helper: compute badge
+        function refreshBadge(invCount) {
+          const sh = it.needed - invCount;
+          let badge = '';
+          if (invCount > 0 || invCount === 0) {
+            if (invCount >= it.needed) badge = `<span class="have-enough">✓ HAVE</span>`;
+            else badge = `<span class="shortage">NEED ${sh} MORE</span>`;
+          }
+          nameEl.innerHTML = it.name + badge;
+        }
+
+        let invCount = parseInt(istate.inv) || 0;
+        refreshBadge(invCount);
+
+        // ARC stepper widget
+        const stepper = document.createElement('div');
+        stepper.className = 'arc-stepper';
+
+        const btnMinus = document.createElement('button');
+        btnMinus.className = 'arc-btn arc-btn-minus';
+        btnMinus.textContent = '‹';
+        btnMinus.title = 'Decrease';
+
+        const countEl = document.createElement('div');
+        countEl.className = 'arc-count' + (invCount === 0 ? ' zero' : '');
+        countEl.textContent = invCount;
+
+        const btnPlus = document.createElement('button');
+        btnPlus.className = 'arc-btn arc-btn-plus';
+        btnPlus.textContent = '›';
+        btnPlus.title = 'Increase';
+
+        function updateCount(newVal) {
+          invCount = Math.max(0, newVal);
+          countEl.textContent = invCount;
+          countEl.className = 'arc-count' + (invCount === 0 ? ' zero' : '');
+          const autoChecked = invCount >= it.needed;
+          chk.checked = autoChecked;
+          row.classList.toggle('done', autoChecked);
+          nameEl.style.textDecoration = autoChecked ? 'line-through' : '';
+          setItemState(sec.section, upg.name, it.name, { inv: String(invCount), checked: autoChecked });
+          refreshBadge(invCount);
+        }
+
+        btnMinus.addEventListener('click', () => updateCount(invCount - 1));
+        btnPlus.addEventListener('click',  () => updateCount(invCount + 1));
+
+        // Tap-and-hold for fast scroll
+        let holdTimer = null;
+        let holdInterval = null;
+        function startHold(delta) {
+          holdTimer = setTimeout(() => {
+            holdInterval = setInterval(() => updateCount(invCount + delta), 80);
+          }, 400);
+        }
+        function stopHold() {
+          clearTimeout(holdTimer);
+          clearInterval(holdInterval);
+        }
+        btnMinus.addEventListener('mousedown',  () => startHold(-1));
+        btnPlus.addEventListener('mousedown',   () => startHold(+1));
+        btnMinus.addEventListener('touchstart', (e) => { e.preventDefault(); startHold(-1); }, {passive:false});
+        btnPlus.addEventListener('touchstart',  (e) => { e.preventDefault(); startHold(+1); }, {passive:false});
+        ['mouseup','mouseleave','touchend','touchcancel'].forEach(ev => {
+          btnMinus.addEventListener(ev, stopHold);
+          btnPlus.addEventListener(ev, stopHold);
+        });
+
+        stepper.appendChild(btnMinus);
+        stepper.appendChild(countEl);
+        stepper.appendChild(btnPlus);
+
+        chk.addEventListener('change', () => {
+          setItemState(sec.section, upg.name, it.name, { checked: chk.checked });
+          row.classList.toggle('done', chk.checked);
+          nameEl.style.textDecoration = chk.checked ? 'line-through' : '';
+        });
+
+        row.appendChild(chk);
+        row.appendChild(nameCol);
+        row.appendChild(stepper);
+        itemsList.appendChild(row);
+      });
+
+      // Auto-expand if searching
+      if (currentSearch) card.classList.add('expanded');
+
+      card.appendChild(itemsList);
+      sectionEl.appendChild(card);
+    });
+
+    if (sectionVisible) app.appendChild(sectionEl);
+  });
+
+  if (!anyVisible) {
+    const msg = document.createElement('div');
+    msg.className = 'no-results';
+    msg.textContent = '// NO ITEMS MATCH YOUR FILTER //';
+    app.appendChild(msg);
+  }
+
+  updateProgress();
+}
+
+// Event listeners
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    render();
+  });
+});
+
+document.getElementById('searchBox').addEventListener('input', e => {
+  currentSearch = e.target.value.trim();
+  render();
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if (confirm('Reset ALL checkboxes and inventory counts?')) {
+    state = {};
+    saveState();
+    render();
+  }
+});
+
+document.getElementById('export-btn').addEventListener('click', () => {
+  downloadJson({ state }, 'arc-raiders-crafting.json');
+});
+
+document.getElementById('import-btn').addEventListener('click', () => {
+  document.getElementById('import-file').click();
+});
+
+document.getElementById('import-file').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      if (!applyImportedData(data)) {
+        alert('Invalid file format.');
+      }
+    } catch (err) {
+      alert('Could not read file.');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+
+loadState();
+render();
+</script>
+</body>
+</html>
