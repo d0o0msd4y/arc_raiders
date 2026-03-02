@@ -233,6 +233,8 @@
   .card:nth-child(1) { animation: fadeUp 0.5s 1.4s ease forwards; }
   .card:nth-child(2) { animation: fadeUp 0.5s 1.55s ease forwards; }
   .card:nth-child(3) { animation: fadeUp 0.5s 1.7s ease forwards; }
+  .card:nth-child(4) { animation: fadeUp 0.5s 1.85s ease forwards; }
+  .card:nth-child(5) { animation: fadeUp 0.5s 2s ease forwards; }
 
   .card:hover {
     border-color: var(--border2);
@@ -243,6 +245,8 @@
   .card-accent { height: 3px; width: 100%; }
   .card--crafting     .card-accent { background: linear-gradient(90deg, var(--cyan), transparent); }
   .card--achievements .card-accent { background: linear-gradient(90deg, var(--orange), transparent); }
+  .card--quests       .card-accent { background: linear-gradient(90deg, var(--green), transparent); }
+  .card--blueprints   .card-accent { background: linear-gradient(90deg, #7aa6ff, transparent); }
   .card--placeholder  .card-accent { background: linear-gradient(90deg, var(--dim), transparent); }
 
   /* Corner notch */
@@ -278,6 +282,8 @@
 
   .card--crafting     .card-icon { color: var(--cyan); }
   .card--achievements .card-icon { color: var(--orange); }
+  .card--quests       .card-icon { color: var(--green); }
+  .card--blueprints   .card-icon { color: #7aa6ff; }
   .card--placeholder  .card-icon { color: var(--dim); }
 
   .card-tag {
@@ -289,6 +295,8 @@
 
   .card--crafting     .card-tag { color: var(--cyan); }
   .card--achievements .card-tag { color: var(--orange); }
+  .card--quests       .card-tag { color: var(--green); }
+  .card--blueprints   .card-tag { color: #7aa6ff; }
   .card--placeholder  .card-tag { color: var(--dim); }
 
   .card-title {
@@ -328,6 +336,8 @@
 
   .card--crafting     .card-cta { color: var(--cyan); }
   .card--achievements .card-cta { color: var(--orange); }
+  .card--quests       .card-cta { color: var(--green); }
+  .card--blueprints   .card-cta { color: #7aa6ff; }
   .card--placeholder  .card-cta { color: var(--border2); }
 
   .card:hover .card-cta { filter: brightness(1.3); }
@@ -339,6 +349,8 @@
 
   .card--crafting     .card-arrow { color: var(--cyan); }
   .card--achievements .card-arrow { color: var(--orange); }
+  .card--quests       .card-arrow { color: var(--green); }
+  .card--blueprints   .card-arrow { color: #7aa6ff; }
   .card--placeholder  .card-arrow { color: var(--border2); }
 
   .card:hover .card-arrow { transform: translateX(4px); }
@@ -451,7 +463,39 @@
       </div>
     </a>
 
-    <div class="card card--placeholder">
+    <a class="card card--quests" href="quests.html">
+      <div class="card-accent"></div>
+      <div class="card-inner">
+        <span class="card-icon">✦</span>
+        <div class="card-tag">Story</div>
+        <div class="card-title">Quest Tracker</div>
+        <div class="card-desc">
+          Track quest objectives and required materials. Mark completions, filter progress, and keep your story tasks organized.
+        </div>
+        <div class="card-footer">
+          <span class="card-cta">Open Tracker</span>
+          <span class="card-arrow">›</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="card card--blueprints" href="blueprints.html">
+      <div class="card-accent"></div>
+      <div class="card-inner">
+        <span class="card-icon">⬡</span>
+        <div class="card-tag">Schematics</div>
+        <div class="card-title">Blueprint Tracker</div>
+        <div class="card-desc">
+          Catalog collected blueprints and schematics. Filter missing items and track your blueprint library at a glance.
+        </div>
+        <div class="card-footer">
+          <span class="card-cta">Open Tracker</span>
+          <span class="card-arrow">›</span>
+        </div>
+      </div>
+    </a>
+
+  <div class="card card--placeholder">
       <div class="card-accent"></div>
       <div class="card-inner">
         <span class="card-icon" style="font-size:1.6rem">＋</span>

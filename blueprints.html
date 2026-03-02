@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARC Raiders – Blueprint Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0b0c10;
+    --panel:     #0e1018;
+    --panel2:    #12151e;
+    --panel3:    #161a25;
+    --border:    #1d2235;
+    --border2:   #2a3350;
+    --cyan:      #00cfff;
+    --orange:    #ff6b35;
+    --green:     #5eff3a;
+    --gold:      #ffcc44;
+    --purple:    #b06aff;
+    --red:       #ff3355;
+    --grey:      #556070;
+    --text:      #b0c4de;
+    --text2:     #6a80a0;
+    --white:     #ddeeff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Faint grid overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      repeating-linear-gradient(0deg,  transparent, transparent 39px, rgba(0,207,255,0.022) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,207,255,0.022) 40px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Chrome bar at top ── */
+  .topbar {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    height: 44px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .topbar-back {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 18px;
+    height: 100%;
+    border-right: 1px solid var(--border);
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.15s, background 0.15s;
+  }
+  .topbar-back:hover { color: var(--cyan); background: rgba(0,207,255,0.05); }
+
+  .topbar-crumb {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    height: 100%;
+    padding-left: 18px;
+  }
+
+  .crumb {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text2);
+  }
+
+  .crumb-sep { margin: 0 8px; color: var(--border2); font-size: 0.8rem; }
+  .crumb.active { color: var(--white); }
+
+  .topbar-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    height: 100%;
+  }
+
+  .topbar-prog {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 18px;
+    border-left: 1px solid var(--border);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--text2);
+    white-space: nowrap;
+  }
+
+  .topbar-prog strong { color: var(--cyan); font-weight: 400; }
+
+  .tp-bar-bg { width: 80px; height: 3px; background: var(--panel3); border: 1px solid var(--border); overflow: hidden; }
+  .tp-bar-fill { height: 100%; background: linear-gradient(90deg, var(--cyan), var(--green)); box-shadow: 0 0 5px rgba(0,207,255,0.6); transition: width 0.35s ease; }
+
+  /* ── Body layout ── */
+  .body-wrap {
+    display: flex;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── Left sidebar ── */
+  .sidebar {
+    width: 196px;
+    flex-shrink: 0;
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sb-section {
+    padding: 10px 0 4px;
+  }
+
+  .sb-heading {
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text2);
+    padding: 0 14px 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .sb-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .sb-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 7px 14px;
+    background: none;
+    border: none;
+    border-left: 2px solid transparent;
+    color: var(--text2);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.1s;
+    text-align: left;
+    gap: 8px;
+  }
+
+  .sb-btn:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+
+  .sb-btn.active {
+    color: var(--cyan);
+    border-left-color: var(--cyan);
+    background: rgba(0,207,255,0.07);
+  }
+
+  .sb-btn .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .sb-btn .sb-count {
+    margin-left: auto;
+    font-size: 0.6rem;
+    color: var(--text2);
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    padding: 0 5px;
+    min-width: 22px;
+    text-align: center;
+  }
+
+  .sb-btn.active .sb-count { color: var(--cyan); border-color: rgba(0,207,255,0.3); }
+
+  .sb-divider { height: 1px; background: var(--border); margin: 4px 14px; }
+
+  /* ── Main area ── */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  /* Search + count bar */
+  .filterbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: var(--panel2);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .search-wrap { position: relative; flex: 1; }
+  .search-icon { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); color: var(--text2); font-size: 0.75rem; pointer-events: none; }
+
+  .searchbox {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 10px 6px 28px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.74rem;
+    letter-spacing: 0.04em;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .searchbox:focus { border-color: var(--cyan); }
+  .searchbox::placeholder { color: var(--text2); }
+
+  .result-count {
+    font-size: 0.62rem;
+    color: var(--text2);
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+
+  /* Grid scroll */
+  .grid-scroll {
+    padding: 16px 24px;
+  }
+
+  /* ── Blueprint grid ── */
+  .bp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 6px;
+  }
+
+  /* ── Blueprint card ── */
+  .bp-card {
+    position: relative;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.12s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Type accent — left edge stripe */
+  .bp-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    z-index: 1;
+  }
+
+  .bp-card[data-type="Weapon"]::before    { background: var(--orange); }
+  .bp-card[data-type="Grenade"]::before   { background: var(--gold); }
+  .bp-card[data-type="Mine"]::before      { background: var(--red); }
+  .bp-card[data-type="Augment"]::before   { background: var(--purple); }
+  .bp-card[data-type="Mod"]::before       { background: var(--cyan); }
+  .bp-card[data-type="Quick Use"]::before { background: var(--green); }
+  .bp-card[data-type="Material"]::before  { background: var(--grey); }
+  .bp-card[data-type="Ammo"]::before      { background: var(--grey); }
+  .bp-card[data-type="???"]::before       { background: var(--border2); }
+
+  /* Top-right corner notch */
+  .bp-card::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 9px; height: 9px;
+    background: var(--bg);
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+    z-index: 1;
+  }
+
+  .bp-card:hover {
+    border-color: rgba(0,207,255,0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 18px rgba(0,207,255,0.1);
+    z-index: 2;
+  }
+
+  /* Collected state */
+  .bp-card.collected {
+    border-color: rgba(94,255,58,0.35);
+    background: rgba(94,255,58,0.03);
+  }
+  .bp-card.collected:hover {
+    border-color: var(--green);
+    box-shadow: 0 4px 18px rgba(94,255,58,0.12);
+  }
+
+  /* Image box — blueprint frame + icon layered */
+  .bp-img {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: linear-gradient(150deg, #0c0f17 0%, #10141e 100%);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  /* Blueprint background frame (the papery worn look from the wiki) */
+  .bp-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: contain;
+    opacity: 0.9;
+    /* Slight blue tint to the frame to match in-game look */
+    filter: hue-rotate(10deg) saturate(0.8);
+  }
+
+  /* Fallback when no frame image */
+  .bp-img.no-frame {
+    background:
+      linear-gradient(150deg, #0e1320 0%, #141a2a 100%);
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* The actual item icon on top of the frame */
+  .bp-icon {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: contain;
+    padding: 12px;
+    transition: opacity 0.18s, transform 0.18s;
+  }
+
+  .bp-card:hover .bp-icon { transform: scale(1.07); }
+
+  /* Green tick when collected */
+  .bp-tick {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(8,10,14,0.65);
+    color: var(--green);
+    font-size: 1.6rem;
+    text-shadow: 0 0 12px var(--green);
+    opacity: 0;
+    transition: opacity 0.18s;
+  }
+
+  .bp-card.collected .bp-tick  { opacity: 1; }
+  .bp-card.collected .bp-icon  { opacity: 0.25; }
+
+  /* Unknown blueprint — question mark */
+  .bp-unknown {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', monospace;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--border2);
+    letter-spacing: 0;
+  }
+
+  /* Label strip below image */
+  .bp-label {
+    padding: 5px 7px 7px;
+    border-top: 1px solid var(--border);
+    background: rgba(0,0,0,0.2);
+  }
+
+  .bp-name {
+    display: block;
+    font-size: 0.68rem;
+    color: var(--text);
+    letter-spacing: 0.05em;
+    line-height: 1.4;
+    text-align: center;
+    word-break: break-word;
+    margin-bottom: 5px;
+    transition: color 0.15s;
+  }
+
+  .bp-card.collected .bp-name { color: var(--green); }
+  .bp-card[data-type="???"]   .bp-name { color: var(--border2); }
+
+  .bp-type {
+    display: block;
+    font-size: 0.56rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .bp-card[data-type="Weapon"]    .bp-type { color: var(--orange); }
+  .bp-card[data-type="Grenade"]   .bp-type { color: var(--gold); }
+  .bp-card[data-type="Mine"]      .bp-type { color: var(--red); }
+  .bp-card[data-type="Augment"]   .bp-type { color: var(--purple); }
+  .bp-card[data-type="Mod"]       .bp-type { color: var(--cyan); }
+  .bp-card[data-type="Quick Use"] .bp-type { color: var(--green); }
+  .bp-card[data-type="Material"]  .bp-type { color: var(--grey); }
+  .bp-card[data-type="Ammo"]      .bp-type { color: var(--grey); }
+  .bp-card[data-type="???"]       .bp-type { color: var(--border2); }
+
+  .no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text2);
+    font-size: 0.74rem;
+    letter-spacing: 0.18em;
+  }
+
+  /* ── Detail panel (slides in from right) ── */
+  .backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 50;
+    backdrop-filter: blur(2px);
+  }
+  .backdrop.open { display: block; }
+
+  .detail {
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    width: 300px;
+    background: var(--panel);
+    border-left: 1px solid var(--border2);
+    z-index: 51;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.22s cubic-bezier(.4,0,.2,1);
+    box-shadow: -8px 0 48px rgba(0,0,0,0.7);
+  }
+
+  .detail.open { transform: translateX(0); }
+
+  .detail-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .detail-head-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--text2);
+  }
+
+  .detail-close {
+    background: none;
+    border: none;
+    color: var(--text2);
+    font-size: 1rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 2px 4px;
+    font-family: 'Share Tech Mono', monospace;
+    transition: color 0.15s;
+  }
+  .detail-close:hover { color: var(--cyan); }
+
+  /* Big image area */
+  .detail-img {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-height: 230px;
+    background: linear-gradient(150deg, #090c14 0%, #10141e 100%);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .detail-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: contain;
+    opacity: 0.85;
+    filter: hue-rotate(10deg) saturate(0.8);
+  }
+
+  .detail-icon {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: contain;
+    padding: 30px;
+  }
+
+  .detail-unknown {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', monospace;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--border2);
+  }
+
+  /* Detail content */
+  .detail-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border2) transparent;
+  }
+
+  .detail-type {
+    display: inline-block;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border: 1px solid currentColor;
+    margin-bottom: 8px;
+    opacity: 0.85;
+  }
+
+  .detail-name {
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  .dl {
+    font-size: 0.55rem;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--text2);
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  .detail-station {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.7rem;
+    color: var(--cyan);
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+  .detail-station::before { content: '⚙'; font-size: 0.75rem; }
+
+  .detail-recipe {
+    border: 1px solid var(--border);
+    background: var(--panel2);
+    margin-bottom: 20px;
+  }
+
+  .dr {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 10px;
+    font-size: 0.7rem;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    letter-spacing: 0.03em;
+  }
+  .dr:last-child { border-bottom: none; }
+  .dr::before { content: '·'; color: var(--cyan); flex-shrink: 0; font-size: 1rem; line-height: 0; }
+
+  .detail-collect-btn {
+    width: 100%;
+    padding: 12px;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 1px solid var(--cyan);
+    background: rgba(0,207,255,0.07);
+    color: var(--cyan);
+  }
+  .detail-collect-btn:hover { background: rgba(0,207,255,0.18); }
+  .detail-collect-btn.is-collected {
+    border-color: var(--green);
+    background: rgba(94,255,58,0.08);
+    color: var(--green);
+  }
+  .detail-collect-btn.is-collected:hover { background: rgba(94,255,58,0.18); }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .sidebar  { display: none; }
+    .detail   { width: 100%; }
+    .bp-grid  { grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Top chrome bar -->
+<div class="topbar">
+  <a class="topbar-back" href="index.html">◂ &nbsp;Hub</a>
+  <div class="topbar-crumb">
+    <span class="crumb">ARC Raiders</span>
+    <span class="crumb-sep">/</span>
+    <span class="crumb active">Blueprints</span>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-prog">
+      <span>Collected &nbsp;<strong id="topProg">0 / 0</strong></span>
+      <div class="tp-bar-bg"><div class="tp-bar-fill" id="topBar" style="width:0%"></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="body-wrap">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <div class="sb-section">
+      <div class="sb-heading">View</div>
+      <button class="sb-btn active" data-filter="all">
+        All <span class="sb-count" id="c-all">0</span>
+      </button>
+      <button class="sb-btn" data-filter="complete">
+        Collected <span class="sb-count" id="c-complete">0</span>
+      </button>
+      <button class="sb-btn" data-filter="incomplete">
+        Missing <span class="sb-count" id="c-incomplete">0</span>
+      </button>
+    </div>
+
+    <div class="sb-divider"></div>
+
+    <div class="sb-section">
+      <div class="sb-heading">Type</div>
+      <button class="sb-btn" data-filter="Weapon">
+        <span class="dot" style="background:var(--orange)"></span>Weapon
+        <span class="sb-count" id="c-Weapon">0</span>
+      </button>
+      <button class="sb-btn" data-filter="Mod">
+        <span class="dot" style="background:var(--cyan)"></span>Mod
+        <span class="sb-count" id="c-Mod">0</span>
+      </button>
+      <button class="sb-btn" data-filter="Grenade">
+        <span class="dot" style="background:var(--gold)"></span>Grenade
+        <span class="sb-count" id="c-Grenade">0</span>
+      </button>
+      <button class="sb-btn" data-filter="Mine">
+        <span class="dot" style="background:var(--red)"></span>Mine
+        <span class="sb-count" id="c-Mine">0</span>
+      </button>
+      <button class="sb-btn" data-filter="Augment">
+        <span class="dot" style="background:var(--purple)"></span>Augment
+        <span class="sb-count" id="c-Augment">0</span>
+      </button>
+      <button class="sb-btn" data-filter="Quick Use">
+        <span class="dot" style="background:var(--green)"></span>Quick Use
+        <span class="sb-count" id="c-Quick Use">0</span>
+      </button>
+      <button class="sb-btn" data-filter="Material">
+        <span class="dot" style="background:var(--grey)"></span>Material
+        <span class="sb-count" id="c-Material">0</span>
+      </button>
+    </div>
+
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <div class="filterbar">
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input class="searchbox" id="searchBox" type="text" placeholder="Search blueprints…">
+      </div>
+      <div class="result-count" id="resultCount">0 items</div>
+    </div>
+
+    <div class="grid-scroll">
+      <div class="bp-grid" id="grid"></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Detail panel -->
+<div class="backdrop" id="backdrop"></div>
+<div class="detail"   id="detail">
+  <div class="detail-head">
+    <span class="detail-head-label">// Blueprint Details</span>
+    <button class="detail-close" id="detailClose">✕</button>
+  </div>
+  <div class="detail-img" id="detailImg">
+    <img class="detail-frame" id="detailFrame" src="" alt="">
+    <img class="detail-icon"  id="detailIcon"  src="" alt="">
+    <div class="detail-unknown" id="detailUnknown" style="display:none">?</div>
+  </div>
+  <div class="detail-body">
+    <span class="detail-type" id="detailType"></span>
+    <div class="detail-name"  id="detailName"></div>
+    <span class="dl">// Crafting Station</span>
+    <div class="detail-station" id="detailStation"></div>
+    <span class="dl">// Required Materials</span>
+    <div class="detail-recipe"  id="detailRecipe"></div>
+    <button class="detail-collect-btn" id="collectBtn">Mark as Collected</button>
+  </div>
+</div>
+
+<script>
+// ── Image filenames (matching what the PowerShell script downloaded) ──
+const IMG_DIR   = 'images/blueprints/';
+const FRAME_SRC = IMG_DIR + 'UI_Blueprint_Background.webp';
+
+const IMG = {
+  'Anvil':                         'Anvil.webp',
+  'Angled Grip II':                'Angled_Grip_II.webp',
+  'Angled Grip III':               'Angled_Grip_III.webp',
+  'Aphelion':                      'Aphelion.webp',
+  'Barricade Kit':                 'Barricade_Kit.webp',
+  'Bettina':                       'Bettina.webp',
+  'Blaze Grenade':                 'Blaze_Grenade.webp',
+  'Blue Light Stick':              'Blue_Light_Stick.webp',
+  'Bobcat':                        'Bobcat.webp',
+  'Burletta':                      'Burletta.webp',
+  'Combat Mk. 3 (Aggressive)':     'Combat_Mk3_Aggressive.webp',
+  'Combat Mk. 3 (Flanking)':       'Combat_Mk3_Flanking.webp',
+  'Compensator II':                'Compensator_II.webp',
+  'Compensator III':               'Compensator_III.webp',
+  'Complex Gun Parts':             'Complex_Gun_Parts.webp',
+  'Deadline':                      'Deadline.webp',
+  'Defibrillator':                 'Defibrillator.webp',
+  'Equalizer':                     'Equalizer.webp',
+  'Explosive Mine':                'Explosive_Mine.webp',
+  'Extended Barrel':               'Extended_Barrel.webp',
+  'Extended Light Mag II':         'Extended_Light_Mag_II.webp',
+  'Extended Light Mag III':        'Extended_Light_Mag_III.webp',
+  'Extended Medium Mag II':        'Extended_Medium_Mag_II.webp',
+  'Extended Medium Mag III':       'Extended_Medium_Mag_III.webp',
+  'Extended Shotgun Mag II':       'Extended_Shotgun_Mag_II.webp',
+  'Extended Shotgun Mag III':      'Extended_Shotgun_Mag_III.webp',
+  'Fireworks Box':                 'Fireworks_Box.webp',
+  'Gas Mine':                      'Gas_Mine.webp',
+  'Green Light Stick':             'Green_Light_Stick.webp',
+  'Heavy Gun Parts':               'Heavy_Gun_Parts.webp',
+  'Hullcracker':                   'Hullcracker.webp',
+  'Il Toro':                       'Il_Toro.webp',
+  'Jolt Mine':                     'Jolt_Mine.webp',
+  'Jupiter':                       'Jupiter.webp',
+  'Light Gun Parts':               'Light_Gun_Parts.webp',
+  'Lightweight Stock':             'Lightweight_Stock.webp',
+  'Looting Mk. 3 (Safekeeper)':   'Looting_Mk3_Safekeeper.webp',
+  'Looting Mk. 3 (Survivor)':     'Looting_Mk3_Survivor.webp',
+  'Lure Grenade':                  'Lure_Grenade.webp',
+  'Medium Gun Parts':              'Medium_Gun_Parts.webp',
+  'Muzzle Brake II':               'Muzzle_Brake_II.webp',
+  'Muzzle Brake III':              'Muzzle_Brake_III.webp',
+  'Osprey':                        'Osprey.webp',
+  'Padded Stock':                  'Padded_Stock.webp',
+  'Pulse Mine':                    'Pulse_Mine.webp',
+  'Red Light Stick':               'Red_Light_Stick.webp',
+  'Remote Raider Flare':           'Remote_Raider_Flare.webp',
+  'Seeker Grenade':                'Seeker_Grenade.webp',
+  'Shotgun Choke II':              'Shotgun_Choke_II.webp',
+  'Shotgun Choke III':             'Shotgun_Choke_III.webp',
+  'Shotgun Silencer':              'Shotgun_Silencer.webp',
+  'Showstopper':                   'Showstopper.webp',
+  'Silencer I':                    'Silencer_I.webp',
+  'Silencer II':                   'Silencer_II.webp',
+  'Smoke Grenade':                 'Smoke_Grenade.webp',
+  'Snap Hook':                     'Snap_Hook.webp',
+  'Stable Stock II':               'Stable_Stock_II.webp',
+  'Stable Stock III':              'Stable_Stock_III.webp',
+  'Tactical Mk. 3 (Defensive)':   'Tactical_Mk3_Defensive.webp',
+  'Tactical Mk. 3 (Healing)':     'Tactical_Mk3_Healing.webp',
+  'Tactical Mk. 3 (Revival)':     'Tactical_Mk3_Revival.webp',
+  'Tagging Grenade':               'Tagging_Grenade.webp',
+  'Tempest':                       'Tempest.webp',
+  'Torrente':                      'Torrente.webp',
+  'Trailblazer':                   'Trailblazer.webp',
+  "Trigger 'Nade":                 'Trigger_Nade.webp',
+  'Venator':                       'Venator.webp',
+  'Vertical Grip II':              'Vertical_Grip_II.webp',
+  'Vertical Grip III':             'Vertical_Grip_III.webp',
+  'Vita Shot':                     'Vita_Shot.webp',
+  'Vita Spray':                    'Vita_Spray.webp',
+  'Vulcano':                       'Vulcano.webp',
+  'Wolfpack':                      'Wolfpack.webp',
+  'Yellow Light Stick':            'Yellow_Light_Stick.webp',
+};
+
+// ── Blueprint data (merged from your existing page + new entries) ──
+const BLUEPRINTS = [
+  { name:'Anvil',                       type:'Weapon',    recipe:['5x Mechanical Components','5x Simple Gun Parts'],                                 craftedAt:'Gunsmith 2' },
+  { name:'Angled Grip II',              type:'Mod',       recipe:['2x Mechanical Components','3x Duct Tape'],                                        craftedAt:'Gunsmith 2' },
+  { name:'Angled Grip III',             type:'Mod',       recipe:['2x Mod Components','5x Duct Tape'],                                               craftedAt:'Gunsmith 3' },
+  { name:'Aphelion',                    type:'Weapon',    recipe:['3x Magnetic Accelerator','3x Complex Gun Parts','1x Matriarch Reactor'],           craftedAt:'Gunsmith 3' },
+  { name:'Barricade Kit',              type:'Quick Use', recipe:['1x Mechanical Components'],                                                         craftedAt:'Utility Station 2' },
+  { name:'Bettina',                     type:'Weapon',    recipe:['3x Advanced Mechanical Components','3x Heavy Gun Parts','3x Canister'],            craftedAt:'Gunsmith 3' },
+  { name:'Blaze Grenade',              type:'Grenade',   recipe:['1x Explosive Compound','2x Oil'],                                                   craftedAt:'Explosives Station 3' },
+  { name:'Blue Light Stick',           type:'Quick Use', recipe:['3x Chemicals'],                                                                      craftedAt:'Utility Station 1' },
+  { name:'Bobcat',                      type:'Weapon',    recipe:['3x Advanced Mechanical Components','3x Light Gun Parts'],                           craftedAt:'Gunsmith 3' },
+  { name:'Burletta',                    type:'Weapon',    recipe:['3x Mechanical Components','3x Simple Gun Parts'],                                   craftedAt:'Gunsmith 1' },
+  { name:'Combat Mk. 3 (Aggressive)',  type:'Augment',   recipe:['2x Advanced Electrical Components','3x Processor'],                                 craftedAt:'Gear Bench 3' },
+  { name:'Combat Mk. 3 (Flanking)',    type:'Augment',   recipe:['2x Advanced Electrical Components','3x Processor'],                                 craftedAt:'Gear Bench 3' },
+  { name:'Compensator II',             type:'Mod',       recipe:['2x Mechanical Components','4x Wires'],                                              craftedAt:'Gunsmith 2' },
+  { name:'Compensator III',            type:'Mod',       recipe:['2x Mod Components','8x Wires'],                                                     craftedAt:'Gunsmith 3' },
+  { name:'Complex Gun Parts',          type:'Material',  recipe:['2x Light Gun Parts','2x Medium Gun Parts','2x Heavy Gun Parts'],                    craftedAt:'Refiner 3' },
+  { name:'Deadline',                   type:'Mine',      recipe:['3x Explosive Compound','2x ARC Circuitry'],                                         craftedAt:'Explosives Station 3' },
+  { name:'Defibrillator',              type:'Quick Use', recipe:['9x Plastic Parts','1x Moss'],                                                        craftedAt:'Medical Lab 2' },
+  { name:'Equalizer',                  type:'Weapon',    recipe:['3x Magnetic Accelerator','3x Complex Gun Parts','1x Queen Reactor'],                craftedAt:'Gunsmith 3' },
+  { name:'Explosive Mine',             type:'Mine',      recipe:['1x Explosive Compound','1x Sensors'],                                               craftedAt:'Explosives Station 3' },
+  { name:'Extended Barrel',            type:'Mod',       recipe:['2x Mod Components','8x Wires'],                                                     craftedAt:'Gunsmith 3' },
+  { name:'Extended Light Mag II',      type:'Mod',       recipe:['2x Mechanical Components','3x Steel Spring'],                                       craftedAt:'Gunsmith 2' },
+  { name:'Extended Light Mag III',     type:'Mod',       recipe:['2x Mod Components','5x Steel Spring'],                                              craftedAt:'Gunsmith 3' },
+  { name:'Extended Medium Mag II',     type:'Mod',       recipe:['2x Mechanical Components','3x Steel Spring'],                                       craftedAt:'Gunsmith 2' },
+  { name:'Extended Medium Mag III',    type:'Mod',       recipe:['2x Mod Components','5x Steel Spring'],                                              craftedAt:'Gunsmith 3' },
+  { name:'Extended Shotgun Mag II',    type:'Mod',       recipe:['2x Mechanical Components','3x Steel Spring'],                                       craftedAt:'Gunsmith 2' },
+  { name:'Extended Shotgun Mag III',   type:'Mod',       recipe:['2x Mod Components','5x Steel Spring'],                                              craftedAt:'Gunsmith 3' },
+  { name:'Fireworks Box',              type:'Quick Use', recipe:['1x Explosive Compound','3x Pop Trigger'],                                            craftedAt:'Explosives Station 2' },
+  { name:'Gas Mine',                   type:'Mine',      recipe:['4x Chemicals','2x Rubber Parts'],                                                   craftedAt:'Explosives Station 1' },
+  { name:'Green Light Stick',          type:'Quick Use', recipe:['3x Chemicals'],                                                                      craftedAt:'Utility Station 1' },
+  { name:'Heavy Gun Parts',            type:'Material',  recipe:['4x Simple Gun Parts'],                                                              craftedAt:'Refiner 2' },
+  { name:'Hullcracker',               type:'Weapon',    recipe:['1x Magnetic Accelerator','3x Heavy Gun Parts','1x Exodus Modules'],                 craftedAt:'Gunsmith 3' },
+  { name:'Il Toro',                    type:'Weapon',    recipe:['5x Mechanical Components','6x Simple Gun Parts'],                                   craftedAt:'Gunsmith 1' },
+  { name:'Jolt Mine',                  type:'Mine',      recipe:['1x Electrical Components','1x Battery'],                                            craftedAt:'Explosives Station 2' },
+  { name:'Jupiter',                    type:'Weapon',    recipe:['3x Magnetic Accelerator','3x Complex Gun Parts','1x Queen Reactor'],                craftedAt:'Gunsmith 3' },
+  { name:'Light Gun Parts',            type:'Material',  recipe:['4x Simple Gun Parts'],                                                              craftedAt:'Refiner 2' },
+  { name:'Lightweight Stock',          type:'Mod',       recipe:['2x Mod Components','5x Duct Tape'],                                                 craftedAt:'Gunsmith 3' },
+  { name:'Looting Mk. 3 (Safekeeper)',type:'Augment',   recipe:['2x Advanced Electrical Components','3x Processor'],                                  craftedAt:'Gear Bench 3' },
+  { name:'Looting Mk. 3 (Survivor)',  type:'Augment',   recipe:['2x Advanced Electrical Components','3x Processor'],                                  craftedAt:'Gear Bench 3' },
+  { name:'Lure Grenade',              type:'Grenade',   recipe:['1x Speaker Component','1x Electrical Components'],                                   craftedAt:'Utility Station 2' },
+  { name:'Medium Gun Parts',          type:'Material',  recipe:['4x Simple Gun Parts'],                                                               craftedAt:'Refiner 2' },
+  { name:'Muzzle Brake II',           type:'Mod',       recipe:['2x Mechanical Components','4x Wires'],                                               craftedAt:'Gunsmith 2' },
+  { name:'Muzzle Brake III',          type:'Mod',       recipe:['2x Mod Components','8x Wires'],                                                      craftedAt:'Gunsmith 3' },
+  { name:'Osprey',                    type:'Weapon',    recipe:['2x Advanced Mechanical Components','3x Medium Gun Parts','7x Wires'],                craftedAt:'Gunsmith 3' },
+  { name:'Padded Stock',              type:'Mod',       recipe:['2x Mod Components','5x Duct Tape'],                                                  craftedAt:'Gunsmith 3' },
+  { name:'Pulse Mine',               type:'Mine',      recipe:['1x Crude Explosives','1x Wires'],                                                    craftedAt:'Explosives Station 1' },
+  { name:'Red Light Stick',           type:'Quick Use', recipe:['3x Chemicals'],                                                                       craftedAt:'Utility Station 1' },
+  { name:'Remote Raider Flare',       type:'Quick Use', recipe:['2x Chemicals','4x Rubber Parts'],                                                     craftedAt:'Utility Station 1' },
+  { name:'Seeker Grenade',            type:'Grenade',   recipe:['1x Crude Explosives','2x ARC Alloy'],                                                craftedAt:'Explosives Station 1' },
+  { name:'Shotgun Choke II',          type:'Mod',       recipe:['2x Mechanical Components','4x Wires'],                                               craftedAt:'Gunsmith 2' },
+  { name:'Shotgun Choke III',         type:'Mod',       recipe:['2x Mod Components','8x Wires'],                                                      craftedAt:'Gunsmith 3' },
+  { name:'Shotgun Silencer',          type:'Mod',       recipe:['2x Mod Components','8x Wires'],                                                      craftedAt:'Gunsmith 3' },
+  { name:'Showstopper',              type:'Grenade',   recipe:['1x Advanced Electrical Components','1x Voltage Converter'],                           craftedAt:'Explosives Station 3' },
+  { name:'Silencer I',               type:'Mod',       recipe:['2x Mechanical Components','4x Wires'],                                               craftedAt:'Gunsmith 2' },
+  { name:'Silencer II',              type:'Mod',       recipe:['2x Mod Components','8x Wires'],                                                      craftedAt:'Gunsmith 3' },
+  { name:'Smoke Grenade',            type:'Grenade',   recipe:['14x Chemicals','1x Canister'],                                                       craftedAt:'Utility Station 2' },
+  { name:'Snap Hook',               type:'Quick Use', recipe:['2x Power Rod','3x Rope','1x Exodus Modules'],                                         craftedAt:'Utility Station 3' },
+  { name:'Stable Stock II',          type:'Mod',       recipe:['2x Mechanical Components','3x Duct Tape'],                                            craftedAt:'Gunsmith 2' },
+  { name:'Stable Stock III',         type:'Mod',       recipe:['2x Mod Components','5x Duct Tape'],                                                   craftedAt:'Gunsmith 3' },
+  { name:'Tactical Mk. 3 (Defensive)',type:'Augment', recipe:['2x Advanced Electrical Components','3x Processor'],                                    craftedAt:'Gear Bench 3' },
+  { name:'Tactical Mk. 3 (Healing)', type:'Augment',  recipe:['2x Advanced Electrical Components','3x Processor'],                                   craftedAt:'Gear Bench 3' },
+  { name:'Tactical Mk. 3 (Revival)', type:'Augment',  recipe:['2x Advanced Electrical Components','3x Processor'],                                   craftedAt:'Gear Bench 3' },
+  { name:'Tagging Grenade',          type:'Grenade',  recipe:['1x Electrical Components','1x Sensors'],                                              craftedAt:'Utility Station 3' },
+  { name:'Tempest',                  type:'Weapon',   recipe:['3x Advanced Mechanical Components','3x Medium Gun Parts','3x Canister'],               craftedAt:'Gunsmith 3' },
+  { name:'Torrente',                 type:'Weapon',   recipe:['2x Advanced Mechanical Components','3x Medium Gun Parts','6x Steel Spring'],           craftedAt:'Gunsmith 3' },
+  { name:'Trailblazer',             type:'Grenade',  recipe:['1x Explosive Compound','1x Synthesized Fuel'],                                         craftedAt:'Explosives Station 3' },
+  { name:"Trigger 'Nade",           type:'Grenade',  recipe:['2x Crude Explosives','1x Processor'],                                                  craftedAt:'Explosives Station 2' },
+  { name:'Venator',                  type:'Weapon',   recipe:['2x Advanced Mechanical Components','3x Medium Gun Parts','5x Magnet'],                 craftedAt:'Gunsmith 3' },
+  { name:'Vertical Grip II',         type:'Mod',      recipe:['2x Mechanical Components','3x Duct Tape'],                                             craftedAt:'Gunsmith 2' },
+  { name:'Vertical Grip III',        type:'Mod',      recipe:['2x Mod Components','5x Duct Tape'],                                                    craftedAt:'Gunsmith 3' },
+  { name:'Vita Shot',                type:'Quick Use',recipe:['2x Antiseptic','1x Syringe'],                                                          craftedAt:'Medical Lab 3' },
+  { name:'Vita Spray',               type:'Quick Use',recipe:['3x Antiseptic','1x Canister'],                                                         craftedAt:'Medical Lab 3' },
+  { name:'Vulcano',                  type:'Weapon',   recipe:['1x Magnetic Accelerator','3x Heavy Gun Parts','1x Exodus Modules'],                    craftedAt:'Gunsmith 3' },
+  { name:'Wolfpack',                 type:'Grenade',  recipe:['2x Explosive Compound','2x Sensors'],                                                  craftedAt:'Explosives Station 3' },
+  { name:'Yellow Light Stick',       type:'Quick Use',recipe:['3x Chemicals'],                                                                        craftedAt:'Utility Station 1' },
+];
+
+const TYPE_COLOR = { Weapon:'#ff6b35', Grenade:'#ffcc44', Mine:'#ff3355', Augment:'#b06aff', Mod:'#00cfff', 'Quick Use':'#5eff3a', Material:'#556070', Ammo:'#556070', '???':'#2a3350' };
+const TYPES = ['Weapon','Mod','Grenade','Mine','Augment','Quick Use','Material'];
+const STORAGE_KEY = 'arc_blueprints_v3';
+
+let state = {};
+let currentFilter = 'all';
+let searchQuery   = '';
+let activeItem    = null;
+
+function load() { try { const s = localStorage.getItem(STORAGE_KEY); if (s) state = JSON.parse(s); } catch(e){} }
+function save() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){} }
+function isCollected(name) { return !!state[name]; }
+function setCollected(name, v) { state[name] = v; save(); }
+
+function matchesBp(bp) {
+  const f = currentFilter;
+  if (f === 'complete')   { if (!isCollected(bp.name)) return false; }
+  if (f === 'incomplete') { if (isCollected(bp.name))  return false; }
+  if (TYPES.includes(f))  { if (bp.type !== f)          return false; }
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    if (!bp.name.toLowerCase().includes(q) && !bp.type.toLowerCase().includes(q)) return false;
+  }
+  return true;
+}
+
+function updateCounts() {
+  const total = BLUEPRINTS.length;
+  const done  = BLUEPRINTS.filter(b => isCollected(b.name)).length;
+  document.getElementById('c-all').textContent      = total;
+  document.getElementById('c-complete').textContent = done;
+  document.getElementById('c-incomplete').textContent = total - done;
+  TYPES.forEach(t => {
+    const el = document.getElementById('c-' + t);
+    if (el) el.textContent = BLUEPRINTS.filter(b => b.type === t).length;
+  });
+  document.getElementById('topProg').textContent = done + ' / ' + total;
+  document.getElementById('topBar').style.width  = (total ? (done / total * 100).toFixed(1) : 0) + '%';
+}
+
+function render() {
+  const grid    = document.getElementById('grid');
+  const visible = BLUEPRINTS.filter(matchesBp);
+  document.getElementById('resultCount').textContent = visible.length + (visible.length === 1 ? ' item' : ' items');
+  grid.innerHTML = '';
+
+  if (!visible.length) {
+    grid.innerHTML = '<div class="no-results">// NO BLUEPRINTS MATCH //</div>';
+    updateCounts();
+    return;
+  }
+
+  visible.forEach(bp => {
+    const isUnknown = bp.type === '???';
+    const col = isCollected(bp.name);
+
+    const card = document.createElement('div');
+    card.className = 'bp-card' + (col ? ' collected' : '');
+    card.dataset.type = bp.type;
+
+    // Image area
+    const imgDiv = document.createElement('div');
+    imgDiv.className = 'bp-img';
+
+    if (!isUnknown) {
+      const frame = document.createElement('img');
+      frame.className = 'bp-frame';
+      frame.src = FRAME_SRC;
+      frame.alt = '';
+      imgDiv.appendChild(frame);
+
+      if (IMG[bp.name]) {
+        const icon = document.createElement('img');
+        icon.className = 'bp-icon';
+        icon.src = IMG_DIR + IMG[bp.name];
+        icon.alt = bp.name;
+        imgDiv.appendChild(icon);
+      }
+
+      const tick = document.createElement('div');
+      tick.className = 'bp-tick';
+      tick.textContent = '✓';
+      imgDiv.appendChild(tick);
+    } else {
+      imgDiv.classList.add('no-frame');
+      const unk = document.createElement('div');
+      unk.className = 'bp-unknown';
+      unk.textContent = '?';
+      imgDiv.appendChild(unk);
+    }
+
+    // Label
+    const label = document.createElement('div');
+    label.className = 'bp-label';
+    label.innerHTML = `<span class="bp-name">${bp.name}</span><span class="bp-type">${bp.type}</span>`;
+
+    card.appendChild(imgDiv);
+    card.appendChild(label);
+
+    if (!isUnknown) {
+      card.addEventListener('click', () => openDetail(bp));
+    }
+
+    grid.appendChild(card);
+  });
+
+  updateCounts();
+}
+
+// ── Detail panel ──
+function openDetail(bp) {
+  activeItem = bp;
+  const col = isCollected(bp.name);
+
+  // Image
+  const hasImg = !!IMG[bp.name];
+  document.getElementById('detailFrame').src     = FRAME_SRC;
+  document.getElementById('detailFrame').style.display = hasImg ? '' : 'none';
+  document.getElementById('detailIcon').src      = hasImg ? IMG_DIR + IMG[bp.name] : '';
+  document.getElementById('detailIcon').style.display  = hasImg ? '' : 'none';
+  document.getElementById('detailUnknown').style.display = hasImg ? 'none' : 'flex';
+
+  // Text
+  const typeEl = document.getElementById('detailType');
+  typeEl.textContent   = bp.type;
+  typeEl.style.color   = TYPE_COLOR[bp.type] || '#fff';
+  typeEl.style.borderColor = TYPE_COLOR[bp.type] || '#fff';
+
+  document.getElementById('detailName').textContent    = bp.name;
+  document.getElementById('detailStation').textContent = bp.craftedAt;
+  document.getElementById('detailRecipe').innerHTML    =
+    bp.recipe.map(r => `<div class="dr">${r}</div>`).join('');
+
+  refreshCollectBtn();
+
+  document.getElementById('detail').classList.add('open');
+  document.getElementById('backdrop').classList.add('open');
+}
+
+function refreshCollectBtn() {
+  if (!activeItem) return;
+  const col = isCollected(activeItem.name);
+  const btn = document.getElementById('collectBtn');
+  btn.textContent = col ? '✓  Collected' : 'Mark as Collected';
+  btn.className   = 'detail-collect-btn' + (col ? ' is-collected' : '');
+}
+
+function closeDetail() {
+  document.getElementById('detail').classList.remove('open');
+  document.getElementById('backdrop').classList.remove('open');
+}
+
+// ── Events ──
+document.getElementById('collectBtn').addEventListener('click', () => {
+  if (!activeItem) return;
+  setCollected(activeItem.name, true);
+  refreshCollectBtn();
+  render();
+  closeDetail();
+});
+
+document.getElementById('detailClose').addEventListener('click', closeDetail);
+document.getElementById('backdrop').addEventListener('click', closeDetail);
+
+document.querySelectorAll('.sb-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    render();
+  });
+});
+
+document.getElementById('searchBox').addEventListener('input', e => {
+  searchQuery = e.target.value.trim();
+  render();
+});
+
+// ── Init ──
+load();
+render();
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARC Raiders – Scrappy Crafting Tracker</title>
+<title>ARC Raiders – Quest Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -489,8 +489,6 @@
 
   .arc-btn:active { background: #161c2a; color: #fff; }
 
-
-
   /* Plus button gets a right-edge accent */
   .arc-btn-plus {
     border-left: 1px solid #1e2840;
@@ -536,7 +534,7 @@
   <header>
     <a class="home-link" href="index.html">← Home</a>
     <h1>◈ ARC RAIDERS</h1>
-    <p>SCRAPPY / WORKSHOP UPGRADE TRACKER &nbsp;|&nbsp; CRAFTING TRACKER</p>
+    <p>QUEST TRACKER &nbsp;|&nbsp; STORY TASKS</p>
   </header>
 
   <div class="controls">
@@ -575,76 +573,23 @@
 <script>
 const DATA = [
   {
-    section: "SCRAPPY UPGRADES",
+    section: "QUESTS",
     upgrades: [
-      { name: "Scrappy 2", items: [{ name: "Dog Collar", needed: 1 }] },
-      { name: "Scrappy 3", items: [{ name: "Lemons", needed: 3 }, { name: "Apricots", needed: 3 }] },
-      { name: "Scrappy 4", items: [{ name: "Prickly Pears", needed: 6 }, { name: "Olives", needed: 6 }, { name: "Cat Bed", needed: 1 }] },
-      { name: "Scrappy 5", items: [{ name: "Mushrooms", needed: 12 }, { name: "Apricots", needed: 12 }, { name: "Very Comfortable Pillow", needed: 3 }] },
+      { name: "Clearer Skies", items: [{ name: "ARC Alloy", needed: 3 }] },
+      { name: "Trash Into Treasure", items: [{ name: "Wires", needed: 6 }, { name: "Battery", needed: 1 }] },
+      { name: "The Trifecta", items: [{ name: "Snitch Scanner", needed: 2 }, { name: "Wasp Driver", needed: 2 }, { name: "Hornet Driver", needed: 2 }] },
+      { name: "Mixed Signals", items: [{ name: "Surveyor Vault", needed: 1 }] },
+      { name: "Unexpected Initiative", items: [{ name: "Water Pump", needed: 1 }] },
+      { name: "Out of the Shadows", items: [{ name: "Rocketeer Driver", needed: 1 }] },
+      { name: "Doctor's Orders", items: [{ name: "Antiseptic", needed: 2 }, { name: "Syringe", needed: 1 }, { name: "Durable Cloth", needed: 1 }, { name: "Great Mullenin", needed: 1 }] },
+      { name: "A Reveal in Ruins", items: [{ name: "ESR Analyzer", needed: 1 }] }
     ]
-  },
-  {
-    section: "GUNSMITH",
-    upgrades: [
-      { name: "Gunsmith 1", items: [{ name: "Metal Parts", needed: 20 }, { name: "Rubber Parts", needed: 30 }] },
-      { name: "Gunsmith 2", items: [{ name: "Rusted Tools", needed: 3 }, { name: "Mechanical Components", needed: 5 }, { name: "Wasp Driver", needed: 8 }] },
-      { name: "Gunsmith 3", items: [{ name: "Rusted Gear", needed: 3 }, { name: "Advanced Mechanical Components", needed: 5 }, { name: "Sentinel Firing Core", needed: 4 }] },
-    ]
-  },
-  {
-    section: "GEAR BENCH",
-    upgrades: [
-      { name: "Gear Bench 1", items: [{ name: "Plastic Parts", needed: 25 }, { name: "Fabric", needed: 30 }] },
-      { name: "Gear Bench 2", items: [{ name: "Power Cable", needed: 3 }, { name: "Electrical Components", needed: 5 }, { name: "Hornet Driver", needed: 5 }] },
-      { name: "Gear Bench 3", items: [{ name: "Industrial Battery", needed: 3 }, { name: "Advanced Electrical Components", needed: 5 }, { name: "Bastion Cell", needed: 6 }] },
-    ]
-  },
-  {
-    section: "MEDICAL LAB",
-    upgrades: [
-      { name: "Medical Lab 1", items: [{ name: "Fabric", needed: 50 }, { name: "ARC Alloy", needed: 6 }] },
-      { name: "Medical Lab 2", items: [{ name: "Cracked Bioscanner", needed: 2 }, { name: "Durable Cloth", needed: 5 }, { name: "Tick Pod", needed: 8 }] },
-      { name: "Medical Lab 3", items: [{ name: "Rusted Shut Medical Kit", needed: 3 }, { name: "Antiseptic", needed: 8 }, { name: "Surveyor Vault", needed: 5 }] },
-    ]
-  },
-  {
-    section: "EXPLOSIVES BENCH",
-    upgrades: [
-      { name: "Explosives Bench 1", items: [{ name: "Rubber Parts", needed: 50 }, { name: "ARC Alloy", needed: 6 }] },
-      { name: "Explosives Bench 2", items: [{ name: "Synthesized Fuel", needed: 3 }, { name: "Crude Explosives", needed: 5 }, { name: "Pop Trigger", needed: 5 }] },
-      { name: "Explosives Bench 3", items: [{ name: "Laboratory Reagents", needed: 3 }, { name: "Explosive Compound", needed: 5 }, { name: "Rocketeer Driver", needed: 3 }] },
-    ]
-  },
-  {
-    section: "UTILITY STATION",
-    upgrades: [
-      { name: "Utility Station 1", items: [{ name: "Plastic Parts", needed: 50 }, { name: "ARC Alloy", needed: 6 }] },
-      { name: "Utility Station 2", items: [{ name: "Damaged Heat Sink", needed: 2 }, { name: "Electrical Components", needed: 5 }, { name: "Snitch Scanner", needed: 6 }] },
-      { name: "Utility Station 3", items: [{ name: "Fried Motherboard", needed: 3 }, { name: "Advanced Electrical Components", needed: 5 }, { name: "Leaper Pulse Unit", needed: 4 }] },
-    ]
-  },
-  {
-    section: "REFINER",
-    upgrades: [
-      { name: "Refiner 1", items: [{ name: "Metal Parts", needed: 60 }, { name: "ARC Powercell", needed: 5 }] },
-      { name: "Refiner 2", items: [{ name: "Toaster", needed: 3 }, { name: "ARC Motion Core", needed: 5 }, { name: "Fireball Burner", needed: 8 }] },
-      { name: "Refiner 3", items: [{ name: "Motor", needed: 3 }, { name: "ARC Circuitry", needed: 10 }, { name: "Bombardier Cell", needed: 6 }] },
-    ]
-  },
-  {
-    section: "EXPEDITION",
-    upgrades: [
-      { name: "Part 1", items: [{ name: "Metal Parts", needed: 150 }, { name: "Rubber Parts", needed: 200 }, { name: "ARC Alloy", needed: 80 }, { name: "Steel Spring", needed: 15 }] },
-      { name: "Part 2", items: [{ name: "Durable Cloth", needed: 35 }, { name: "Wires", needed: 30 }, { name: "Electrical Components", needed: 30 }, { name: "Cooling Coil", needed: 4 }] },
-      { name: "Part 3", items: [{ name: "Light Bulb", needed: 4 }, { name: "Battery", needed: 30 }, { name: "Shredder Gyro", needed: 10 }, { name: "Exodus Modules", needed: 1 }] },
-      { name: "Part 4", items: [{ name: "Frequency Modulation Box", needed: 5 }, { name: "Advanced Electrical Components", needed: 5 }, { name: "Ion Sputter", needed: 3 }, { name: "Leaper Pulse Unit", needed: 3 }] },
-    ]
-  },
+  }
 ];
 
 // State: { "section:upgrade:itemName": { checked: bool, inv: number } }
 let state = {};
-const STORAGE_KEY = 'arc_raiders_checklist_v1';
+const STORAGE_KEY = 'arc_raiders_quests_v1';
 
 function loadState() {
   try {
@@ -755,8 +700,8 @@ function render() {
 
   DATA.forEach(sec => {
     let sectionVisible = false;
-  const sectionEl = document.createElement('div');
-  sectionEl.className = 'upgrade-section';
+    const sectionEl = document.createElement('div');
+    sectionEl.className = 'upgrade-section';
 
     const header = document.createElement('div');
     header.className = 'section-header';
@@ -799,9 +744,9 @@ function render() {
       mini.className = 'upgrade-progress-mini' + (done === total ? ' complete' : '');
       mini.textContent = `${done}/${total}`;
 
-  const banner = document.createElement('div');
-  banner.className = 'complete-banner';
-  banner.textContent = 'Complete';
+      const banner = document.createElement('div');
+      banner.className = 'complete-banner';
+      banner.textContent = 'Complete';
 
       titleRow.appendChild(expandIcon);
       titleRow.appendChild(name);
@@ -827,7 +772,7 @@ function render() {
       const itemsList = document.createElement('div');
       itemsList.className = 'items-list';
 
-  itemsToRender.forEach(it => {
+      itemsToRender.forEach(it => {
         const istate = getItemState(sec.section, upg.name, it.name);
         const row = document.createElement('div');
         row.className = 'item-row' + (istate.checked ? ' done' : '');
@@ -843,7 +788,7 @@ function render() {
 
         const nameEl = document.createElement('span');
         nameEl.className = 'item-name';
-  nameEl.style.textDecoration = '';
+        nameEl.style.textDecoration = '';
 
         const neededLabel = document.createElement('span');
         neededLabel.className = 'item-needed-label';
@@ -941,7 +886,7 @@ function render() {
       // Auto-expand if searching
       if (currentSearch) card.classList.add('expanded');
 
-  updateCardCompletion();
+      updateCardCompletion();
 
       card.appendChild(itemsList);
       sectionEl.appendChild(card);
@@ -1000,7 +945,7 @@ document.getElementById('resetBtn').addEventListener('click', () => {
 });
 
 document.getElementById('export-btn').addEventListener('click', () => {
-  downloadJson({ state }, 'arc-raiders-crafting.json');
+  downloadJson({ state }, 'arc-raiders-quests.json');
 });
 
 document.getElementById('import-btn').addEventListener('click', () => {

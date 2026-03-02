@@ -6,6 +6,8 @@ A fan-made set of interactive trackers for **ARC Raiders**, covering crafting up
 
 - **Crafting tracker** — `crafting.html`
 - **Achievement tracker** — `achievements.html`
+- **Quest tracker** — `quests.html`
+- **Blueprint tracker** — `blueprints.html`
 
 ## Features
 
