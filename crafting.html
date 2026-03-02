@@ -262,6 +262,7 @@
     background: var(--surface);
     border: 1px solid var(--border);
     margin-bottom: 8px;
+    position: relative;
     transition: border-color 0.15s;
   }
 
@@ -287,6 +288,26 @@
 
   .upgrade-card.expanded .expand-icon { transform: rotate(90deg); }
 
+  .upgrade-card.complete .upgrade-title-row {
+    justify-content: space-between;
+  }
+
+  .upgrade-card.complete .upgrade-title-row > * {
+    display: none;
+  }
+
+  .upgrade-card.complete .upgrade-title-row .complete-banner {
+    display: inline-flex;
+  }
+
+  .upgrade-card.complete .upgrade-title-row .expand-icon {
+    display: inline-flex;
+  }
+
+  .upgrade-card.complete .upgrade-title-row .upgrade-name {
+    display: inline-flex;
+  }
+
   .upgrade-name {
     font-family: 'Orbitron', monospace;
     font-size: 0.8rem;
@@ -306,13 +327,54 @@
 
   /* Items list */
   .items-list {
-    display: none;
-    padding: 0 14px 12px 14px;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    padding: 0 14px;
     background: var(--surface2);
     border-top: 1px solid var(--border);
+    transition: max-height 0.35s ease, opacity 0.25s ease, padding 0.25s ease;
   }
 
-  .upgrade-card.expanded .items-list { display: block; }
+  .upgrade-card.expanded .items-list {
+    max-height: 1200px;
+    opacity: 1;
+    padding: 0 14px 12px 14px;
+  }
+
+  .upgrade-card.complete:not(.expanded) .items-list {
+    max-height: 0;
+    opacity: 0;
+    padding: 0 14px;
+  }
+
+  .complete-banner {
+    display: none;
+    position: static;
+    padding: 2px 10px;
+    border: 1px solid rgba(127,255,95,0.6);
+    color: var(--accent3);
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: rgba(127,255,95,0.08);
+    opacity: 0;
+    transform: translateY(-6px);
+    pointer-events: none;
+  }
+
+  .upgrade-card.complete .complete-banner {
+    opacity: 1;
+    transform: translateY(0);
+    animation: completePulse 1s ease;
+    box-shadow: 0 0 12px rgba(127,255,95,0.25);
+  }
+
+  @keyframes completePulse {
+    0% { transform: translateY(-6px) scale(0.96); opacity: 0; }
+    60% { transform: translateY(0) scale(1.02); opacity: 1; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+  }
 
   /* Single item row */
   .item-row {
@@ -327,7 +389,25 @@
 
   .item-row:last-child { border-bottom: none; }
   .item-row.done { opacity: 0.35; }
-  .item-row.done .item-name { text-decoration: line-through; color: var(--done-text); }
+  .item-row.done .item-name { color: var(--done-text); }
+
+  .complete-view .item-row {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .complete-view .item-check,
+  .complete-view .arc-stepper,
+  .complete-view .shortage,
+  .complete-view .have-enough {
+    display: none;
+  }
+
+  .complete-view .item-row.done { opacity: 1; }
+  .complete-view .item-row.done .item-name {
+    text-decoration: none;
+    color: var(--text);
+  }
 
   /* Checkbox */
   .item-check {
@@ -677,7 +757,7 @@ function isUpgradeFilterMatch(sec, upg, filter) {
   if (filter === 'all') return true;
   const allChecked = upg.items.every(it => getItemState(sec.section, upg.name, it.name).checked);
   if (filter === 'complete') return allChecked;
-  if (filter === 'incomplete') return !allChecked;
+  if (filter === 'incomplete') return true;
   return true;
 }
 
@@ -688,7 +768,8 @@ function render() {
 
   DATA.forEach(sec => {
     let sectionVisible = false;
-    const sectionEl = document.createElement('div');
+  const sectionEl = document.createElement('div');
+  sectionEl.className = 'upgrade-section';
 
     const header = document.createElement('div');
     header.className = 'section-header';
@@ -698,6 +779,13 @@ function render() {
     sec.upgrades.forEach(upg => {
       if (!isUpgradeMatch(sec, upg, currentSearch)) return;
       if (!isUpgradeFilterMatch(sec, upg, currentFilter)) return;
+      const itemsToRender = currentFilter === 'incomplete'
+        ? upg.items.filter(it => {
+            const istate = getItemState(sec.section, upg.name, it.name);
+            const invCount = parseInt(istate.inv) || 0;
+            return invCount < it.needed;
+          })
+        : upg.items;
       sectionVisible = true;
       anyVisible = true;
 
@@ -724,20 +812,35 @@ function render() {
       mini.className = 'upgrade-progress-mini' + (done === total ? ' complete' : '');
       mini.textContent = `${done}/${total}`;
 
+  const banner = document.createElement('div');
+  banner.className = 'complete-banner';
+  banner.textContent = 'Complete';
+
       titleRow.appendChild(expandIcon);
       titleRow.appendChild(name);
       titleRow.appendChild(mini);
+      titleRow.appendChild(banner);
       titleRow.addEventListener('click', () => {
         card.classList.toggle('expanded');
       });
 
       card.appendChild(titleRow);
 
+      function updateCardCompletion() {
+        const doneCount = upg.items.filter(it => getItemState(sec.section, upg.name, it.name).checked).length;
+        if (doneCount === upg.items.length) {
+          card.classList.add('complete');
+          card.classList.remove('expanded');
+        } else {
+          card.classList.remove('complete');
+        }
+      }
+
       // Items list
       const itemsList = document.createElement('div');
       itemsList.className = 'items-list';
 
-      upg.items.forEach(it => {
+  itemsToRender.forEach(it => {
         const istate = getItemState(sec.section, upg.name, it.name);
         const row = document.createElement('div');
         row.className = 'item-row' + (istate.checked ? ' done' : '');
@@ -753,7 +856,7 @@ function render() {
 
         const nameEl = document.createElement('span');
         nameEl.className = 'item-name';
-        nameEl.style.textDecoration = istate.checked ? 'line-through' : '';
+  nameEl.style.textDecoration = '';
 
         const neededLabel = document.createElement('span');
         neededLabel.className = 'item-needed-label';
@@ -801,9 +904,10 @@ function render() {
           const autoChecked = invCount >= it.needed;
           chk.checked = autoChecked;
           row.classList.toggle('done', autoChecked);
-          nameEl.style.textDecoration = autoChecked ? 'line-through' : '';
+          nameEl.style.textDecoration = '';
           setItemState(sec.section, upg.name, it.name, { inv: String(invCount), checked: autoChecked });
           refreshBadge(invCount);
+          updateCardCompletion();
         }
 
         btnMinus.addEventListener('click', () => updateCount(invCount - 1));
@@ -837,7 +941,8 @@ function render() {
         chk.addEventListener('change', () => {
           setItemState(sec.section, upg.name, it.name, { checked: chk.checked });
           row.classList.toggle('done', chk.checked);
-          nameEl.style.textDecoration = chk.checked ? 'line-through' : '';
+          nameEl.style.textDecoration = '';
+          updateCardCompletion();
         });
 
         row.appendChild(chk);
@@ -848,6 +953,8 @@ function render() {
 
       // Auto-expand if searching
       if (currentSearch) card.classList.add('expanded');
+
+  updateCardCompletion();
 
       card.appendChild(itemsList);
       sectionEl.appendChild(card);
@@ -873,6 +980,22 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.classList.add('active');
     currentFilter = btn.dataset.filter;
     render();
+    document.body.classList.toggle('complete-view', currentFilter === 'complete');
+    if (currentFilter === 'incomplete') {
+      const cards = Array.from(document.querySelectorAll('.upgrade-card'));
+      cards.forEach(card => card.classList.remove('expanded'));
+      document.querySelectorAll('.upgrade-section').forEach(section => {
+        const firstIncomplete = Array.from(section.querySelectorAll('.upgrade-card'))
+          .find(card => !card.classList.contains('complete'));
+        if (firstIncomplete) firstIncomplete.classList.add('expanded');
+      });
+    }
+    if (currentFilter === 'complete') {
+      const cards = Array.from(document.querySelectorAll('.upgrade-card'));
+      cards.forEach(card => card.classList.remove('expanded'));
+      cards.filter(card => card.classList.contains('complete'))
+        .forEach(card => card.classList.add('expanded'));
+    }
   });
 });
 
