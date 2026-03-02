@@ -540,52 +540,8 @@ const achievements = {
 const TOTAL = 50;
 const REDACTED_TEXT = '█████████████████████████████████████';
 
-// Default progress (Jake's saves) – only applied if no existing data
-const DEFAULT_PROGRESS = {
-  "Practice Makes Perfect": true,
-  "Rite of Passage": true,
-  "Self-Sufficient": true,
-  "In Your Element": true,
-  "Getting Serious": true,
-  "Well-Travelled": true,
-  "Scavenger": true,
-  "Escape Artist": true,
-  "Dedicated to the Craft": true,
-  "Legend of Speranza": true,
-  "The Long Haul": true,
-  "Well-Armed": true,
-  "Shots Fired": true,
-  "Racking Them Up": true,
-  "Trail of Destruction": true,
-  "Expert Weaponsmith": true,
-  "Bells and Whistles": true,
-  "Long Shot": true,
-  "Comparative Study": true,
-  "For Science!": true,
-  "Three Birds, One Stone": true,
-  "Mechanical Failure": true,
-  "Bringing Down the Big Guns": true,
-  "Into the Breach": true,
-  "A Tale for the Ages": true,
-  "Snitches Get Stitches": true,
-  "Crossed the Threshold": true,
-  "Unyielding": true,
-  "Horseshoes and Hand Grenades": true,
-  "Today You, Tomorrow Me": true,
-  "The Friends We Made Along The Way": true,
-  "The Big Haul": true,
-  "Back from the Brink": true,
-  "Behind Closed Doors": true,
-  "Into Thin Air": true,
-  "Not Over Till It's Over": true,
-  "Same Song, Same Verse": true,
-  "Most Durable Pants in Speranza": true,
-  "In the Nick of Time": true,
-  "No Going Back": true,
-  "A Vendetta is Born": true,
-  "See You Never": true,
-  "Top of the World": true
-};
+// Default progress – empty for new users
+const DEFAULT_PROGRESS = {};
 
 // Load state – use saved data if it exists, otherwise apply defaults
 let completed = JSON.parse(localStorage.getItem('arc-achievements') || 'null') || { ...DEFAULT_PROGRESS };
