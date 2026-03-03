@@ -394,9 +394,12 @@
   }
 
   @media (max-width: 480px) {
+    header        { padding: 36px 16px 28px; }
     .header-title { letter-spacing: 0.03em; }
-    .status-bar   { gap: 18px; }
-    .cards        { grid-template-columns: 1fr; }
+    .header-divider { width: min(320px, 85%); }
+    .status-bar   { gap: 14px; padding: 0 16px 28px; }
+    .status-item  { font-size: 0.68rem; }
+    .cards        { grid-template-columns: 1fr; padding: 0 12px 60px; }
   }
 </style>
 </head>
@@ -433,14 +436,14 @@
 
   <div class="cards">
 
-    <a class="card card--crafting" href="crafting.html">
+    <a class="card card--blueprints" href="blueprints.html">
       <div class="card-accent"></div>
       <div class="card-inner">
-        <span class="card-icon">⚙</span>
-        <div class="card-tag">Workshop</div>
-        <div class="card-title">Crafting Tracker</div>
+        <span class="card-icon">⬡</span>
+        <div class="card-tag">Schematics</div>
+        <div class="card-title">Blueprint Tracker</div>
         <div class="card-desc">
-          Track every item needed for Scrappy upgrades, Gunsmith, Gear Bench, Medical Lab, Refiner, and more. Set your inventory count and auto-complete items as you gather them.
+          Catalog collected blueprints and schematics. Filter missing items and track your blueprint library at a glance.
         </div>
         <div class="card-footer">
           <span class="card-cta">Open Tracker</span>
@@ -449,14 +452,14 @@
       </div>
     </a>
 
-    <a class="card card--achievements" href="achievements.html">
+    <a class="card card--crafting" href="crafting.html">
       <div class="card-accent"></div>
       <div class="card-inner">
-        <span class="card-icon">◈</span>
-        <div class="card-tag">Progress</div>
-        <div class="card-title">Achievement Tracker</div>
+        <span class="card-icon">⚙</span>
+        <div class="card-tag">Workshop</div>
+        <div class="card-title">Crafting Tracker</div>
         <div class="card-desc">
-          Track every achievement and unlock condition. Filter by category, mark completed milestones, and see what you still need to hunt down across all game modes.
+          Track every item needed for Scrappy upgrades, Gunsmith, Gear Bench, Medical Lab, Refiner, and more. Set your inventory count and auto-complete items as you gather them.
         </div>
         <div class="card-footer">
           <span class="card-cta">Open Tracker</span>
@@ -481,14 +484,14 @@
       </div>
     </a>
 
-    <a class="card card--blueprints" href="blueprints.html">
+    <a class="card card--achievements" href="achievements.html">
       <div class="card-accent"></div>
       <div class="card-inner">
-        <span class="card-icon">⬡</span>
-        <div class="card-tag">Schematics</div>
-        <div class="card-title">Blueprint Tracker</div>
+        <span class="card-icon">◈</span>
+        <div class="card-tag">Progress</div>
+        <div class="card-title">Achievement Tracker</div>
         <div class="card-desc">
-          Catalog collected blueprints and schematics. Filter missing items and track your blueprint library at a glance.
+          Track every achievement and unlock condition. Filter by category, mark completed milestones, and see what you still need to hunt down across all game modes.
         </div>
         <div class="card-footer">
           <span class="card-cta">Open Tracker</span>

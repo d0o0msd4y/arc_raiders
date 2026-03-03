@@ -527,7 +527,12 @@
   }
 
   @media (max-width: 500px) {
-    .item-row { grid-template-columns: 28px 1fr; }
+    .container { padding: 12px; }
+    .controls  { gap: 8px; }
+    .filter-btn, .data-btn { min-height: 36px; padding: 7px 12px; }
+    .reset-btn  { min-height: 36px; padding: 7px 12px; }
+    .search-box { min-width: 120px; }
+    .item-row   { grid-template-columns: 28px 1fr; }
     .arc-stepper { grid-column: 1 / -1; margin-left: 38px; width: fit-content; }
   }
 </style>
@@ -930,7 +935,7 @@ function render() {
         btnPlus.title = 'Increase';
 
         function updateCount(newVal) {
-          invCount = Math.max(0, newVal);
+          invCount = Math.max(0, Math.min(it.needed, newVal));
           countEl.textContent = invCount;
           countEl.className = 'arc-count' + (invCount === 0 ? ' zero' : '');
           const autoChecked = invCount >= it.needed;
@@ -956,15 +961,18 @@ function render() {
         function stopHold() {
           clearTimeout(holdTimer);
           clearInterval(holdInterval);
+          holdInterval = null;
         }
         btnMinus.addEventListener('mousedown',  () => startHold(-1));
         btnPlus.addEventListener('mousedown',   () => startHold(+1));
         btnMinus.addEventListener('touchstart', (e) => { e.preventDefault(); startHold(-1); }, {passive:false});
         btnPlus.addEventListener('touchstart',  (e) => { e.preventDefault(); startHold(+1); }, {passive:false});
-        ['mouseup','mouseleave','touchend','touchcancel'].forEach(ev => {
+        ['mouseup','mouseleave','touchcancel'].forEach(ev => {
           btnMinus.addEventListener(ev, stopHold);
           btnPlus.addEventListener(ev, stopHold);
         });
+        btnMinus.addEventListener('touchend', (e) => { e.preventDefault(); const held = !!holdInterval; stopHold(); if (!held) updateCount(invCount - 1); }, {passive:false});
+        btnPlus.addEventListener('touchend',  (e) => { e.preventDefault(); const held = !!holdInterval; stopHold(); if (!held) updateCount(invCount + 1); }, {passive:false});
 
         stepper.appendChild(btnMinus);
         stepper.appendChild(countEl);

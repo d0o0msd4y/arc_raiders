@@ -635,9 +635,17 @@
 
   /* ── Responsive ── */
   @media (max-width: 640px) {
-    .sidebar  { display: none; }
-    .detail   { width: 100%; }
-    .bp-grid  { grid-template-columns: repeat(5, 1fr); }
+    .sidebar      { display: none; }
+    .detail       { width: 100%; }
+    .topbar-prog  { display: none; }
+    .grid-scroll  { padding: 12px; }
+    .bp-grid      { grid-template-columns: repeat(5, 1fr); }
+  }
+
+  @media (max-width: 480px) {
+    .bp-grid { grid-template-columns: repeat(4, 1fr); }
+    .bp-name { font-size: 0.62rem; }
+    .bp-type { font-size: 0.52rem; }
   }
 </style>
 </head>
